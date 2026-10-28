@@ -1,14 +1,5 @@
 #!/usr/bin/env bash
-# script/setup: create .local/ha-venv with Home Assistant and the test tooling.
+# script/setup: install Home Assistant and the dev tooling into .venv from uv.lock.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-
-uv venv --python 3.14 --allow-existing .local/ha-venv
-export VIRTUAL_ENV="$PWD/.local/ha-venv"
-uv pip install --requirement requirements_dev.txt
-
-# Set BOM_API_PATH to a bom-weather-api checkout to develop against it
-# instead of the PyPI release.
-if [[ -n "${BOM_API_PATH:-}" ]]; then
-    uv pip install --editable "$BOM_API_PATH"
-fi
+uv sync --locked "$@"
