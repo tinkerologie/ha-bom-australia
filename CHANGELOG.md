@@ -6,6 +6,13 @@ project uses Home Assistant style versions (`YYYY.M.PATCH`).
 
 ## [Unreleased]
 
+### Added
+
+- Dashboard cards, registered automatically: BoM weather (all-in-one), BoM now,
+  BoM forecast, BoM warnings and BoM observations, each with a visual editor,
+  sections view sizing and light and dark themes. The card picker suggests the
+  BoM weather card for the integration's weather entity.
+
 ### Fixed
 
 - Setup now defaults to the nearest station with complete observations.

@@ -138,6 +138,7 @@ OBSERVATION_SENSORS: tuple[BomObservationSensorDescription, ...] = (
         device_class=SensorDeviceClass.WIND_SPEED,
         native_unit_of_measurement=UnitOfSpeed.KILOMETERS_PER_HOUR,
         state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
         value_fn=lambda obs: obs.wind_speed,
     ),
     BomObservationSensorDescription(
@@ -146,6 +147,7 @@ OBSERVATION_SENSORS: tuple[BomObservationSensorDescription, ...] = (
         device_class=SensorDeviceClass.WIND_SPEED,
         native_unit_of_measurement=UnitOfSpeed.KILOMETERS_PER_HOUR,
         state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
         value_fn=lambda obs: obs.wind_gust,
     ),
     BomObservationSensorDescription(
@@ -154,6 +156,7 @@ OBSERVATION_SENSORS: tuple[BomObservationSensorDescription, ...] = (
         device_class=SensorDeviceClass.WIND_SPEED,
         native_unit_of_measurement=UnitOfSpeed.KILOMETERS_PER_HOUR,
         entity_registry_enabled_default=False,
+        suggested_display_precision=0,
         value_fn=lambda obs: obs.wind_gust_max,
         attributes_fn=lambda obs: _time_attribute(obs.wind_gust_max_at),
     ),
