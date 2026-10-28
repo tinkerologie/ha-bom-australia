@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# script/develop: run Home Assistant with this integration on http://localhost:8123.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+mkdir -p config/custom_components
+ln -sfn "$PWD/custom_components/bom_australia" config/custom_components/bom_australia
+exec .local/ha-venv/bin/hass --config config --debug

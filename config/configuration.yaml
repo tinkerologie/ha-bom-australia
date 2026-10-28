@@ -1,0 +1,15 @@
+# Development configuration used by script/develop.
+default_config:
+
+homeassistant:
+  name: BoM development
+  latitude: -27.4698
+  longitude: 153.0251
+  time_zone: Australia/Brisbane
+  unit_system: metric
+
+logger:
+  default: info
+  logs:
+    custom_components.bom_australia: debug
+    bom_weather_api: debug

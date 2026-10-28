@@ -1,0 +1,202 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Choose your location",
+        "description": "Pick a point on the map. The nearest Bureau of Meteorology forecast towns will be listed next.",
+        "data": {
+          "location": "Location"
+        },
+        "data_description": {
+          "location": "Defaults to your Home Assistant home location."
+        }
+      },
+      "town": {
+        "title": "Choose a forecast town",
+        "description": "The Bureau of Meteorology issues town forecasts for these places, nearest first.",
+        "data": {
+          "location_aac": "Forecast town"
+        }
+      },
+      "station": {
+        "title": "Choose an observation station",
+        "description": "Current conditions come from a Bureau of Meteorology weather station. These stations are nearest to {location}.",
+        "data": {
+          "station_id": "Observation station"
+        }
+      },
+      "reconfigure": {
+        "title": "Change observation station",
+        "description": "Choose the weather station that provides current conditions for {location}.",
+        "data": {
+          "station_id": "Observation station"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to reach the Bureau of Meteorology. Check your internet connection and that FTP (port 21) is not blocked.",
+      "station_unavailable": "This station is not reporting at the moment. Choose another station."
+    },
+    "abort": {
+      "already_configured": "This forecast town is already configured.",
+      "cannot_connect": "Unable to reach the Bureau of Meteorology. Check your internet connection and that FTP (port 21) is not blocked.",
+      "no_stations": "No observation stations were found near this town.",
+      "reconfigure_successful": "The observation station was changed."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Forecast sensors",
+        "data": {
+          "forecast_days": "Forecast days"
+        },
+        "data_description": {
+          "forecast_days": "Number of days to create daily forecast sensors for: 0 creates none, 1 is today and 2 adds tomorrow. The weather entity always includes the full 7-day forecast."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "apparent_temperature": {
+        "name": "Feels like temperature"
+      },
+      "dew_point": {
+        "name": "Dew point"
+      },
+      "wind_gust": {
+        "name": "Wind gust"
+      },
+      "wind_gust_max": {
+        "name": "Max wind gust today"
+      },
+      "wind_direction": {
+        "name": "Wind direction"
+      },
+      "wind_bearing": {
+        "name": "Wind bearing"
+      },
+      "rain_since_9am": {
+        "name": "Rain since 9am"
+      },
+      "rain_24h": {
+        "name": "Rain to 9am"
+      },
+      "observed_temp_max": {
+        "name": "Observed max temperature"
+      },
+      "observed_temp_min": {
+        "name": "Observed min temperature"
+      },
+      "delta_t": {
+        "name": "Delta-T"
+      },
+      "visibility": {
+        "name": "Visibility"
+      },
+      "cloud_oktas": {
+        "name": "Cloud cover (oktas)"
+      },
+      "observed_at": {
+        "name": "Observation time"
+      },
+      "temp_max": {
+        "name": "Max temperature day {day}"
+      },
+      "temp_min": {
+        "name": "Min temperature day {day}"
+      },
+      "short_text": {
+        "name": "Summary day {day}"
+      },
+      "extended_text": {
+        "name": "Forecast day {day}"
+      },
+      "rain_chance": {
+        "name": "Chance of rain day {day}"
+      },
+      "rain_amount_range": {
+        "name": "Rain amount day {day}"
+      },
+      "rain_amount_min": {
+        "name": "Rain amount min day {day}"
+      },
+      "rain_amount_max": {
+        "name": "Rain amount max day {day}"
+      },
+      "uv_index": {
+        "name": "UV index day {day}"
+      },
+      "uv_category": {
+        "name": "UV category day {day}",
+        "state": {
+          "low": "Low",
+          "moderate": "Moderate",
+          "high": "High",
+          "very_high": "Very high",
+          "extreme": "Extreme"
+        }
+      },
+      "uv_start": {
+        "name": "Sun protection start day {day}"
+      },
+      "uv_end": {
+        "name": "Sun protection end day {day}"
+      },
+      "fire_danger": {
+        "name": "Fire danger day {day}"
+      },
+      "icon_descriptor": {
+        "name": "Icon descriptor day {day}"
+      },
+      "sunrise": {
+        "name": "Sunrise day {day}"
+      },
+      "sunset": {
+        "name": "Sunset day {day}"
+      },
+      "now_label": {
+        "name": "Now label"
+      },
+      "now_temp": {
+        "name": "Now temperature"
+      },
+      "later_label": {
+        "name": "Later label"
+      },
+      "later_temp": {
+        "name": "Later temperature"
+      },
+      "forecast_issued_at": {
+        "name": "Forecast issued"
+      },
+      "warnings": {
+        "name": "Warnings"
+      }
+    }
+  },
+  "exceptions": {
+    "observation_failed": {
+      "message": "Error fetching observations from the Bureau of Meteorology: {error}"
+    },
+    "daily_forecast_failed": {
+      "message": "Error fetching the daily forecast from the Bureau of Meteorology: {error}"
+    },
+    "hourly_forecast_failed": {
+      "message": "Error fetching the hourly forecast from the Bureau of Meteorology: {error}"
+    },
+    "warnings_failed": {
+      "message": "Error fetching warnings from the Bureau of Meteorology: {error}"
+    },
+    "rate_limited": {
+      "message": "The Bureau of Meteorology is rate limiting requests. Retrying later."
+    }
+  },
+  "issues": {
+    "station_unavailable": {
+      "title": "Weather station {station} is not reporting",
+      "description": "The Bureau of Meteorology weather station {station} used for current conditions in {location} is not reporting. It may be temporarily offline or decommissioned.\n\nIf it does not recover, go to **Settings > Devices & services > Bureau of Meteorology (Australia)**, open the {location} entry menu and choose **Reconfigure** to pick another station."
+    }
+  }
+}

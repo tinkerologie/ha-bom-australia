@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# script/setup: create .local/ha-venv with Home Assistant and the test tooling.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+uv venv --python 3.14 --allow-existing .local/ha-venv
+export VIRTUAL_ENV="$PWD/.local/ha-venv"
+uv pip install --requirement requirements_dev.txt
+
+# Develop against a sibling bom-weather-api checkout when there is one.
+if [[ -f ../bom-api/pyproject.toml ]]; then
+    uv pip install --editable ../bom-api
+fi

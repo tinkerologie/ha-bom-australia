@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# script/test: run the test suite. Extra arguments are passed to pytest.
+#   script/test --cov              coverage report
+#   script/test --snapshot-update  regenerate snapshots
+#   BOM_LIVE=1 script/test tests/test_live.py   end-to-end against live BoM
+set -euo pipefail
+cd "$(dirname "$0")/.."
+exec .local/ha-venv/bin/python -m pytest "$@"

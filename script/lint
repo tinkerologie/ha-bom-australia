@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# script/lint: format, lint and type-check. Pass --check to only report.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+BIN=.local/ha-venv/bin
+if [[ "${1:-}" == "--check" ]]; then
+    "$BIN/ruff" format --check .
+    "$BIN/ruff" check .
+else
+    "$BIN/ruff" format .
+    "$BIN/ruff" check --fix .
+fi
+"$BIN/mypy" custom_components/bom_australia

@@ -1,0 +1,39 @@
+{
+  "entity": {
+    "sensor": {
+      "wind_gust": { "default": "mdi:weather-windy-variant" },
+      "wind_gust_max": { "default": "mdi:weather-windy-variant" },
+      "wind_direction": { "default": "mdi:compass-outline" },
+      "rain_since_9am": { "default": "mdi:weather-pouring" },
+      "rain_24h": { "default": "mdi:weather-pouring" },
+      "delta_t": { "default": "mdi:thermometer-water" },
+      "visibility": { "default": "mdi:eye-outline" },
+      "cloud_oktas": { "default": "mdi:cloud-percent-outline" },
+      "observed_at": { "default": "mdi:clock-outline" },
+      "short_text": { "default": "mdi:text-short" },
+      "extended_text": { "default": "mdi:text" },
+      "rain_chance": { "default": "mdi:umbrella-outline" },
+      "rain_amount_range": { "default": "mdi:weather-rainy" },
+      "rain_amount_min": { "default": "mdi:weather-rainy" },
+      "rain_amount_max": { "default": "mdi:weather-pouring" },
+      "uv_index": { "default": "mdi:sun-wireless-outline" },
+      "uv_category": { "default": "mdi:sun-wireless-outline" },
+      "uv_start": { "default": "mdi:sunglasses" },
+      "uv_end": { "default": "mdi:sunglasses" },
+      "fire_danger": { "default": "mdi:fire-alert" },
+      "icon_descriptor": { "default": "mdi:weather-partly-cloudy" },
+      "sunrise": { "default": "mdi:weather-sunset-up" },
+      "sunset": { "default": "mdi:weather-sunset-down" },
+      "now_label": { "default": "mdi:label-outline" },
+      "later_label": { "default": "mdi:label-outline" },
+      "forecast_issued_at": { "default": "mdi:clock-check-outline" },
+      "warnings": {
+        "default": "mdi:alert-outline",
+        "range": {
+          "0": "mdi:check-circle-outline",
+          "1": "mdi:alert"
+        }
+      }
+    }
+  }
+}

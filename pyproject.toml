@@ -1,0 +1,90 @@
+[project]
+name = "ha-bom-australia"
+version = "0.0.0" # The integration version is managed in manifest.json only
+description = "Bureau of Meteorology (Australia) integration for Home Assistant"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.14.2"
+
+[dependency-groups]
+dev = [
+    "bom-weather-api==0.1.0",
+    "freezegun==1.5.5",
+    "pytest-homeassistant-custom-component==0.13.375",
+    "ruff==0.17.3",
+    "syrupy==6.1.1",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+# Until bom-weather-api is published to PyPI, develop against the sibling checkout.
+bom-weather-api = { path = "../bom-api", editable = true }
+
+[tool.ruff]
+target-version = "py314"
+line-length = 88
+exclude = [".local"]
+
+[tool.ruff.lint]
+select = [
+    "A", "ASYNC", "B", "BLE", "C4", "D", "DTZ", "E", "F", "FLY", "FURB", "G",
+    "I", "INP", "LOG", "PERF", "PGH", "PIE", "PL", "PT", "PTH", "RET", "RSE",
+    "RUF", "S", "SIM", "SLOT", "T20", "TID", "TRY", "UP", "W",
+]
+ignore = [
+    "D202",    # blank line after function docstring (HA style)
+    "D203",    # incompatible with D211
+    "D213",    # incompatible with D212
+    "E501",    # handled by the formatter
+    "PLR0913", # entity constructors legitimately take many arguments
+    "PLR2004", # magic values in tests and thresholds
+    "S101",    # asserts narrow types, as in HA core
+    "TRY003",  # long exception messages are fine
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D", "INP001", "PLC0415", "SLF001", "TID251"]
+
+[tool.ruff.lint.flake8-import-conventions.extend-aliases]
+"homeassistant.helpers.config_validation" = "cv"
+"homeassistant.helpers.device_registry" = "dr"
+"homeassistant.helpers.entity_registry" = "er"
+"homeassistant.helpers.issue_registry" = "ir"
+"homeassistant.util.dt" = "dt_util"
+probatio = "vol"
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"aiohttp".msg = "Use bom_weather_api.BomClient; protocol code belongs in the library."
+"aioftp".msg = "Use bom_weather_api.BomClient; protocol code belongs in the library."
+"voluptuous".msg = "Home Assistant 2026.9+ uses probatio: import probatio as vol."
+
+[tool.ruff.lint.isort]
+force-sort-within-sections = true
+known-first-party = ["custom_components", "homeassistant"]
+combine-as-imports = true
+split-on-trailing-comma = false
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+addopts = "--strict-markers -p syrupy"
+filterwarnings = ["error"]
+
+[tool.coverage.run]
+branch = true
+source = ["custom_components.bom_australia"]
+
+[tool.coverage.report]
+fail_under = 95
+show_missing = true
+
+[tool.mypy]
+python_version = "3.14"
+check_untyped_defs = true
+warn_return_any = true
+warn_unused_ignores = true
+no_implicit_optional = true
+ignore_missing_imports = true

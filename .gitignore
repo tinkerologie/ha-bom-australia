@@ -1,0 +1,23 @@
+# Home Assistant development config and runtime
+config/*
+!config/configuration.yaml
+
+# Virtual environments, caches and build output
+.local/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+uv.lock
+
+# Local environment and editor files
+.env
+.env.*
+*.log
+.DS_Store
+.idea/
