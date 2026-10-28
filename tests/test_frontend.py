@@ -203,3 +203,30 @@ async def test_removing_last_entry_unregisters(
         unregister.assert_not_called()
         await hass.config_entries.async_remove(other.entry_id)
         unregister.assert_awaited_once()
+
+
+async def test_deferred_skipped_when_entry_removed(hass: HomeAssistant) -> None:
+    """Nothing is registered when the last entry went away before start."""
+    hass.set_state(CoreState.not_running)
+    await frontend.async_register_frontend(hass)
+    hass.config.components.update({"http", "frontend"})
+    hass.http = MagicMock(async_register_static_paths=AsyncMock())
+    _use(hass, _resources([]))
+    await hass.async_start()
+    await hass.async_block_till_done()
+    hass.http.async_register_static_paths.assert_not_awaited()
+    assert not hass.data.get(frontend._REGISTERED)
+
+
+async def test_reregister_keeps_static_path(
+    hass: HomeAssistant, web: SimpleNamespace
+) -> None:
+    """A static path cannot be removed, so it is registered only once."""
+    resources = _resources([])
+    _use(hass, resources)
+    await frontend.async_register_frontend(hass)
+    await frontend.async_unregister_frontend(hass)
+    resources.items.clear()
+    await frontend.async_register_frontend(hass)
+    hass.http.async_register_static_paths.assert_awaited_once()
+    assert resources.async_create_item.await_count == 2
