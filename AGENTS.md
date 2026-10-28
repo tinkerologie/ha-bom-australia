@@ -11,7 +11,7 @@ Meteorology data. Targets Home Assistant 2026.9+ and Python 3.14.
   - `weather.py`, `sensor.py`, `entity.py`, `diagnostics.py`
   - `translations/en.json`: the only strings file (custom integrations cannot use `[%key:…]` references)
 - `tests/`: pytest-homeassistant-custom-component tests with syrupy snapshots in `tests/snapshots/`. Fixtures are real BoM responses captured on 2026-10-28.
-- The client library lives in a separate repository, `tinkerologie/bom-weather-api` (checked out next to this repo as `../bom-api`).
+- The client library is [`bom-weather-api`](https://pypi.org/project/bom-weather-api/) (`tinkerologie/bom-weather-api`). Keep the pin in `manifest.json` and `requirements_test.txt` identical. To develop against a local checkout: `BOM_API_PATH=../bom-api script/setup`.
 
 ## Rules
 
