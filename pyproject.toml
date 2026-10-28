@@ -17,10 +17,8 @@ dev = [
 
 [tool.uv]
 package = false
-
-[tool.uv.sources]
-# Until bom-weather-api is published to PyPI, develop against the sibling checkout.
-bom-weather-api = { path = "../bom-api", editable = true }
+# 0.13.4 fixes GHSA-hq85-5cpj-mr62 and GHSA-2cv4-cqwr-gwf7.
+required-version = ">=0.13.4"
 
 [tool.ruff]
 target-version = "py314"

@@ -7,7 +7,8 @@ uv venv --python 3.14 --allow-existing .local/ha-venv
 export VIRTUAL_ENV="$PWD/.local/ha-venv"
 uv pip install --requirement requirements_dev.txt
 
-# Develop against a sibling bom-weather-api checkout when there is one.
-if [[ -f ../bom-api/pyproject.toml ]]; then
-    uv pip install --editable ../bom-api
+# Set BOM_API_PATH to a bom-weather-api checkout to develop against it
+# instead of the PyPI release.
+if [[ -n "${BOM_API_PATH:-}" ]]; then
+    uv pip install --editable "$BOM_API_PATH"
 fi

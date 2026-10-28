@@ -4,5 +4,5 @@ pytest-homeassistant-custom-component==0.13.375
 pytest-cov==7.1.0
 syrupy==6.1.1
 freezegun==1.5.5
-# Until bom-weather-api is published to PyPI, install it from its repository.
-bom-weather-api @ git+https://github.com/tinkerologie/bom-weather-api@main
+# Must match the requirement in custom_components/bom_australia/manifest.json.
+bom-weather-api==0.1.0
