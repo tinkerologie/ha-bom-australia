@@ -13,7 +13,6 @@ __pycache__/
 .coverage
 coverage.xml
 htmlcov/
-uv.lock
 
 # Local environment and editor files
 .env

@@ -11,7 +11,7 @@ Meteorology data. Targets Home Assistant 2026.9+ and Python 3.14.
   - `weather.py`, `sensor.py`, `entity.py`, `diagnostics.py`
   - `translations/en.json`: the only strings file (custom integrations cannot use `[%key:…]` references)
 - `tests/`: pytest-homeassistant-custom-component tests with syrupy snapshots in `tests/snapshots/`. Fixtures are real BoM responses captured on 2026-10-28.
-- The client library is [`bom-weather-api`](https://pypi.org/project/bom-weather-api/) (`tinkerologie/bom-weather-api`). Keep the pin in `manifest.json` and `requirements_test.txt` identical. To develop against a local checkout: `BOM_API_PATH=../bom-api script/setup`.
+- The client library is [`bom-weather-api`](https://pypi.org/project/bom-weather-api/) (`tinkerologie/bom-weather-api`). Keep the pin in `manifest.json` and the `test` dependency group in `pyproject.toml` identical. To test against a local checkout: `BOM_API_PATH=../bom-api script/test`.
 
 ## Rules
 
@@ -25,8 +25,10 @@ Meteorology data. Targets Home Assistant 2026.9+ and Python 3.14.
 
 ## Commands
 
+Dependencies are managed with uv: `pyproject.toml` dependency groups and the committed `uv.lock`. Never add `requirements*.txt` files; use `uv add --group dev <pkg>`.
+
 ```bash
-script/setup                 # create .local/ha-venv
+script/setup                 # uv sync --locked into .venv
 script/lint                  # ruff format + ruff check --fix + mypy
 script/test --cov            # tests with coverage (keep ≥ 95%)
 script/test --snapshot-update

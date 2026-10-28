@@ -4,4 +4,4 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p config/custom_components
 ln -sfn "$PWD/custom_components/bom_australia" config/custom_components/bom_australia
-exec .local/ha-venv/bin/hass --config config --debug
+exec uv run --locked hass --config config --debug

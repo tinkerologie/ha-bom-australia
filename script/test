@@ -3,6 +3,10 @@
 #   script/test --cov              coverage report
 #   script/test --snapshot-update  regenerate snapshots
 #   BOM_LIVE=1 script/test tests/test_live.py   end-to-end against live BoM
+#   BOM_API_PATH=../bom-api script/test         test against a local library checkout
 set -euo pipefail
 cd "$(dirname "$0")/.."
-exec .local/ha-venv/bin/python -m pytest "$@"
+if [[ -n "${BOM_API_PATH:-}" ]]; then
+    exec uv run --locked --with-editable "$BOM_API_PATH" pytest "$@"
+fi
+exec uv run --locked pytest "$@"

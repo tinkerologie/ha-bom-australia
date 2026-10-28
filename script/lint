@@ -2,12 +2,11 @@
 # script/lint: format, lint and type-check. Pass --check to only report.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-BIN=.local/ha-venv/bin
 if [[ "${1:-}" == "--check" ]]; then
-    "$BIN/ruff" format --check .
-    "$BIN/ruff" check .
+    uv run --locked ruff format --check .
+    uv run --locked ruff check .
 else
-    "$BIN/ruff" format .
-    "$BIN/ruff" check --fix .
+    uv run --locked ruff format .
+    uv run --locked ruff check --fix .
 fi
-"$BIN/mypy" custom_components/bom_australia
+uv run --locked mypy custom_components/bom_australia

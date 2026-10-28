@@ -1,8 +1,0 @@
-# Test dependencies. pytest-homeassistant-custom-component pins homeassistant;
-# keep it matched to the minimum version in hacs.json.
-pytest-homeassistant-custom-component==0.13.375
-pytest-cov==7.1.0
-syrupy==6.1.1
-freezegun==1.5.5
-# Must match the requirement in custom_components/bom_australia/manifest.json.
-bom-weather-api==0.1.0
