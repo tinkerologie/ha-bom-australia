@@ -99,6 +99,44 @@ Each data set updates independently, so a problem with one source only makes
 its own entities unavailable. If BoM asks the integration to slow down, it
 waits for the time BoM requests.
 
+## Dashboard cards
+
+The integration includes dashboard cards. They are registered automatically:
+there is nothing to install or add under **Dashboard resources**. In a
+dashboard, choose **Add card** and search for **BoM**, or edit the integration's
+weather entity and accept the suggested card.
+
+| Card | Type | Shows |
+|---|---|---|
+| BoM weather | `custom:bom-australia-card` | All of the cards below in one card |
+| BoM now | `custom:bom-australia-now-card` | Current temperature and condition; today's summary and max/min; rain, UV, wind and humidity; fire danger and active warnings |
+| BoM forecast | `custom:bom-australia-forecast-card` | 7-day forecast with temperature range bars, rain chance and amount, and expandable BoM forecast text; hourly forecast |
+| BoM warnings | `custom:bom-australia-warnings-card` | Current warnings with their full text |
+| BoM observations | `custom:bom-australia-observations-card` | Latest station readings |
+
+Every card has a visual editor. Options:
+
+| Option | Cards | Description |
+|---|---|---|
+| `device` | All | Forecast town to show. Defaults to the first one. |
+| `title` | All | Card title. |
+| `sections` | BoM weather | Which cards to stack, in order: `now`, `forecast`, `warnings`, `observations`. |
+| `forecast_type` | BoM forecast | `daily` (default) or `hourly`. |
+| `days` / `hours` | BoM forecast | Days (1–7, default 7) and hours (1–72, default 24) to show. |
+| `show_text` | BoM forecast | Show the BoM forecast text under each day (default `true`). |
+| `max_items` | BoM warnings | Warnings shown before the list collapses (default 5). |
+
+```yaml
+type: custom:bom-australia-card
+sections: [now, forecast, warnings]
+```
+
+The cards use your theme's colours, work in light and dark mode, and size
+themselves in the sections view. Fire danger uses the Australian Fire Danger
+Rating System colours and UV uses the WHO UV scale, always together with text.
+Readings from sensors that are disabled by default (for example max gust or
+rain to 9am) appear in the observations card once you enable them.
+
 ## Examples
 
 Notify when a new warning is issued:

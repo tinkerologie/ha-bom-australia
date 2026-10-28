@@ -1,0 +1,1917 @@
+{
+ "captured": "live Home Assistant 2026.10.4, 2026-10-28 (town renamed)",
+ "device_id": "6948db47010bde580b43abafc0db7053",
+ "entities": {
+  "sensor.brisbane_temperature": {
+   "entity_id": "sensor.brisbane_temperature",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053"
+  },
+  "sensor.brisbane_feels_like_temperature": {
+   "entity_id": "sensor.brisbane_feels_like_temperature",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "apparent_temperature"
+  },
+  "sensor.brisbane_dew_point": {
+   "entity_id": "sensor.brisbane_dew_point",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "dew_point"
+  },
+  "sensor.brisbane_humidity": {
+   "entity_id": "sensor.brisbane_humidity",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053"
+  },
+  "sensor.brisbane_atmospheric_pressure": {
+   "entity_id": "sensor.brisbane_atmospheric_pressure",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053"
+  },
+  "sensor.brisbane_wind_speed": {
+   "entity_id": "sensor.brisbane_wind_speed",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053"
+  },
+  "sensor.brisbane_wind_gust": {
+   "entity_id": "sensor.brisbane_wind_gust",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "wind_gust"
+  },
+  "sensor.brisbane_wind_direction": {
+   "entity_id": "sensor.brisbane_wind_direction",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "wind_direction"
+  },
+  "sensor.brisbane_rain_since_9am": {
+   "entity_id": "sensor.brisbane_rain_since_9am",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "rain_since_9am"
+  },
+  "sensor.brisbane_observation_time": {
+   "entity_id": "sensor.brisbane_observation_time",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "observed_at"
+  },
+  "sensor.brisbane_max_temperature_day_0": {
+   "entity_id": "sensor.brisbane_max_temperature_day_0",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "temp_max"
+  },
+  "sensor.brisbane_min_temperature_day_0": {
+   "entity_id": "sensor.brisbane_min_temperature_day_0",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "temp_min"
+  },
+  "sensor.brisbane_summary_day_0": {
+   "entity_id": "sensor.brisbane_summary_day_0",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "short_text"
+  },
+  "sensor.brisbane_forecast_day_0": {
+   "entity_id": "sensor.brisbane_forecast_day_0",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "extended_text"
+  },
+  "sensor.brisbane_chance_of_rain_day_0": {
+   "entity_id": "sensor.brisbane_chance_of_rain_day_0",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "rain_chance"
+  },
+  "sensor.brisbane_rain_amount_day_0": {
+   "entity_id": "sensor.brisbane_rain_amount_day_0",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "rain_amount_range"
+  },
+  "sensor.brisbane_uv_index_day_0": {
+   "entity_id": "sensor.brisbane_uv_index_day_0",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "uv_index"
+  },
+  "sensor.brisbane_fire_danger_day_0": {
+   "entity_id": "sensor.brisbane_fire_danger_day_0",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "fire_danger"
+  },
+  "sensor.brisbane_max_temperature_day_1": {
+   "entity_id": "sensor.brisbane_max_temperature_day_1",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "temp_max"
+  },
+  "sensor.brisbane_min_temperature_day_1": {
+   "entity_id": "sensor.brisbane_min_temperature_day_1",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "temp_min"
+  },
+  "sensor.brisbane_summary_day_1": {
+   "entity_id": "sensor.brisbane_summary_day_1",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "short_text"
+  },
+  "sensor.brisbane_forecast_day_1": {
+   "entity_id": "sensor.brisbane_forecast_day_1",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "extended_text"
+  },
+  "sensor.brisbane_chance_of_rain_day_1": {
+   "entity_id": "sensor.brisbane_chance_of_rain_day_1",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "rain_chance"
+  },
+  "sensor.brisbane_rain_amount_day_1": {
+   "entity_id": "sensor.brisbane_rain_amount_day_1",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "rain_amount_range"
+  },
+  "sensor.brisbane_uv_index_day_1": {
+   "entity_id": "sensor.brisbane_uv_index_day_1",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "uv_index"
+  },
+  "sensor.brisbane_fire_danger_day_1": {
+   "entity_id": "sensor.brisbane_fire_danger_day_1",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "fire_danger"
+  },
+  "sensor.brisbane_max_temperature_day_2": {
+   "entity_id": "sensor.brisbane_max_temperature_day_2",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "temp_max"
+  },
+  "sensor.brisbane_min_temperature_day_2": {
+   "entity_id": "sensor.brisbane_min_temperature_day_2",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "temp_min"
+  },
+  "sensor.brisbane_summary_day_2": {
+   "entity_id": "sensor.brisbane_summary_day_2",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "short_text"
+  },
+  "sensor.brisbane_forecast_day_2": {
+   "entity_id": "sensor.brisbane_forecast_day_2",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "extended_text"
+  },
+  "sensor.brisbane_chance_of_rain_day_2": {
+   "entity_id": "sensor.brisbane_chance_of_rain_day_2",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "rain_chance"
+  },
+  "sensor.brisbane_rain_amount_day_2": {
+   "entity_id": "sensor.brisbane_rain_amount_day_2",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "rain_amount_range"
+  },
+  "sensor.brisbane_uv_index_day_2": {
+   "entity_id": "sensor.brisbane_uv_index_day_2",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "uv_index"
+  },
+  "sensor.brisbane_fire_danger_day_2": {
+   "entity_id": "sensor.brisbane_fire_danger_day_2",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "fire_danger"
+  },
+  "sensor.brisbane_warnings": {
+   "entity_id": "sensor.brisbane_warnings",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053",
+   "translation_key": "warnings"
+  },
+  "weather.brisbane": {
+   "entity_id": "weather.brisbane",
+   "platform": "bom_australia",
+   "device_id": "6948db47010bde580b43abafc0db7053"
+  }
+ },
+ "states": {
+  "sensor.brisbane_temperature": {
+   "entity_id": "sensor.brisbane_temperature",
+   "state": "24.4",
+   "attributes": {
+    "state_class": "measurement",
+    "unit_of_measurement": "°C",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "device_class": "temperature",
+    "friendly_name": "Brisbane Temperature"
+   },
+   "last_changed": "2026-10-28T13:23:06.143356+10:00",
+   "last_reported": "2026-10-28T13:23:06.143356+10:00",
+   "last_updated": "2026-10-28T13:23:06.143356+10:00",
+   "context": {
+    "id": "01M608GTGZK714F23QGW07E0T5",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_feels_like_temperature": {
+   "entity_id": "sensor.brisbane_feels_like_temperature",
+   "state": "24.0",
+   "attributes": {
+    "state_class": "measurement",
+    "unit_of_measurement": "°C",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "device_class": "temperature",
+    "friendly_name": "Brisbane Feels like temperature"
+   },
+   "last_changed": "2026-10-28T13:23:06.143426+10:00",
+   "last_reported": "2026-10-28T13:23:06.143426+10:00",
+   "last_updated": "2026-10-28T13:23:06.143426+10:00",
+   "context": {
+    "id": "01M608GTGZK33T4J0EHC8V0RGY",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_dew_point": {
+   "entity_id": "sensor.brisbane_dew_point",
+   "state": "12.4",
+   "attributes": {
+    "state_class": "measurement",
+    "unit_of_measurement": "°C",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "device_class": "temperature",
+    "friendly_name": "Brisbane Dew point"
+   },
+   "last_changed": "2026-10-28T13:23:06.143461+10:00",
+   "last_reported": "2026-10-28T13:23:06.143461+10:00",
+   "last_updated": "2026-10-28T13:23:06.143461+10:00",
+   "context": {
+    "id": "01M608GTGZX6754TF16A11RT1F",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_humidity": {
+   "entity_id": "sensor.brisbane_humidity",
+   "state": "47",
+   "attributes": {
+    "state_class": "measurement",
+    "unit_of_measurement": "%",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "device_class": "humidity",
+    "friendly_name": "Brisbane Humidity"
+   },
+   "last_changed": "2026-10-28T13:23:06.143490+10:00",
+   "last_reported": "2026-10-28T13:23:06.143490+10:00",
+   "last_updated": "2026-10-28T13:23:06.143490+10:00",
+   "context": {
+    "id": "01M608GTGZEF157GJWHVN6XCWN",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_atmospheric_pressure": {
+   "entity_id": "sensor.brisbane_atmospheric_pressure",
+   "state": "1016.2",
+   "attributes": {
+    "state_class": "measurement",
+    "unit_of_measurement": "hPa",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "device_class": "atmospheric_pressure",
+    "friendly_name": "Brisbane Atmospheric pressure"
+   },
+   "last_changed": "2026-10-28T13:23:06.143517+10:00",
+   "last_reported": "2026-10-28T13:23:06.143517+10:00",
+   "last_updated": "2026-10-28T13:23:06.143517+10:00",
+   "context": {
+    "id": "01M608GTGZPG0EM3ZTPFSKAFCK",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_wind_speed": {
+   "entity_id": "sensor.brisbane_wind_speed",
+   "state": "6.0",
+   "attributes": {
+    "state_class": "measurement",
+    "unit_of_measurement": "km/h",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "device_class": "wind_speed",
+    "friendly_name": "Brisbane Wind speed"
+   },
+   "last_changed": "2026-10-28T13:23:06.143541+10:00",
+   "last_reported": "2026-10-28T13:23:06.143541+10:00",
+   "last_updated": "2026-10-28T13:23:06.143541+10:00",
+   "context": {
+    "id": "01M608GTGZNVH0ABVWNE93ZCDN",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_wind_gust": {
+   "entity_id": "sensor.brisbane_wind_gust",
+   "state": "9.0",
+   "attributes": {
+    "state_class": "measurement",
+    "unit_of_measurement": "km/h",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "device_class": "wind_speed",
+    "friendly_name": "Brisbane Wind gust"
+   },
+   "last_changed": "2026-10-28T13:23:06.143565+10:00",
+   "last_reported": "2026-10-28T13:23:06.143565+10:00",
+   "last_updated": "2026-10-28T13:23:06.143565+10:00",
+   "context": {
+    "id": "01M608GTGZC3TT23Z59QZ2NTYF",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_wind_direction": {
+   "entity_id": "sensor.brisbane_wind_direction",
+   "state": "W",
+   "attributes": {
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Wind direction"
+   },
+   "last_changed": "2026-10-28T13:23:06.143588+10:00",
+   "last_reported": "2026-10-28T13:23:06.143588+10:00",
+   "last_updated": "2026-10-28T13:23:06.143588+10:00",
+   "context": {
+    "id": "01M608GTGZ8F1AVN4J5SZP5N9E",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_rain_since_9am": {
+   "entity_id": "sensor.brisbane_rain_since_9am",
+   "state": "0.2",
+   "attributes": {
+    "state_class": "total_increasing",
+    "unit_of_measurement": "mm",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "device_class": "precipitation",
+    "friendly_name": "Brisbane Rain since 9am"
+   },
+   "last_changed": "2026-10-28T13:03:06.067876+10:00",
+   "last_reported": "2026-10-28T13:23:06.143613+10:00",
+   "last_updated": "2026-10-28T13:03:06.067876+10:00",
+   "context": {
+    "id": "01M607C6JKVKK5TQ61EBFK5P06",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_observation_time": {
+   "entity_id": "sensor.brisbane_observation_time",
+   "state": "2026-10-28T03:20:00+00:00",
+   "attributes": {
+    "station_id": "040913",
+    "station_name": "Brisbane",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "device_class": "timestamp",
+    "friendly_name": "Brisbane Observation time"
+   },
+   "last_changed": "2026-10-28T13:23:06.143638+10:00",
+   "last_reported": "2026-10-28T13:23:06.143638+10:00",
+   "last_updated": "2026-10-28T13:23:06.143638+10:00",
+   "context": {
+    "id": "01M608GTGZB4YAH8H6BA6TWCP2",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_max_temperature_day_0": {
+   "entity_id": "sensor.brisbane_max_temperature_day_0",
+   "state": "29.0",
+   "attributes": {
+    "date": "2026-10-28",
+    "unit_of_measurement": "°C",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "device_class": "temperature",
+    "friendly_name": "Brisbane Max temperature day 0"
+   },
+   "last_changed": "2026-10-28T13:03:06.068815+10:00",
+   "last_reported": "2026-10-28T13:03:06.068815+10:00",
+   "last_updated": "2026-10-28T13:03:06.068815+10:00",
+   "context": {
+    "id": "01M607C6JMQ8MG2RB1XPVYEPV4",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_min_temperature_day_0": {
+   "entity_id": "sensor.brisbane_min_temperature_day_0",
+   "state": "unknown",
+   "attributes": {
+    "date": "2026-10-28",
+    "unit_of_measurement": "°C",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "device_class": "temperature",
+    "friendly_name": "Brisbane Min temperature day 0"
+   },
+   "last_changed": "2026-10-28T13:03:06.069161+10:00",
+   "last_reported": "2026-10-28T13:03:06.069161+10:00",
+   "last_updated": "2026-10-28T13:03:06.069161+10:00",
+   "context": {
+    "id": "01M607C6JNXNH62E1MT21VW9E6",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_summary_day_0": {
+   "entity_id": "sensor.brisbane_summary_day_0",
+   "state": "Shower or two.",
+   "attributes": {
+    "date": "2026-10-28",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Summary day 0"
+   },
+   "last_changed": "2026-10-28T13:03:06.069305+10:00",
+   "last_reported": "2026-10-28T13:03:06.069305+10:00",
+   "last_updated": "2026-10-28T13:03:06.069305+10:00",
+   "context": {
+    "id": "01M607C6JNF7RKR78VSYZW616B",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_forecast_day_0": {
+   "entity_id": "sensor.brisbane_forecast_day_0",
+   "state": "Partly cloudy. Medium chance of showers, becoming less likely in the evening. The chance of a thunderstorm in the late morning and afternoon, possibly severe with damaging winds, large hail and heavy rain which may lead to flash flooding in the north. Li…",
+   "attributes": {
+    "date": "2026-10-28",
+    "text": "Partly cloudy. Medium chance of showers, becoming less likely in the evening. The chance of a thunderstorm in the late morning and afternoon, possibly severe with damaging winds, large hail and heavy rain which may lead to flash flooding in the north. Light winds. Daytime maximum temperatures around 30.",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Forecast day 0"
+   },
+   "last_changed": "2026-10-28T13:03:06.069448+10:00",
+   "last_reported": "2026-10-28T13:03:06.069448+10:00",
+   "last_updated": "2026-10-28T13:03:06.069448+10:00",
+   "context": {
+    "id": "01M607C6JN2HWSX2CXC1AZ2X90",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_chance_of_rain_day_0": {
+   "entity_id": "sensor.brisbane_chance_of_rain_day_0",
+   "state": "50",
+   "attributes": {
+    "date": "2026-10-28",
+    "unit_of_measurement": "%",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Chance of rain day 0"
+   },
+   "last_changed": "2026-10-28T13:03:06.069585+10:00",
+   "last_reported": "2026-10-28T13:03:06.069585+10:00",
+   "last_updated": "2026-10-28T13:03:06.069585+10:00",
+   "context": {
+    "id": "01M607C6JNTHG8FKD4J68MF33B",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_rain_amount_day_0": {
+   "entity_id": "sensor.brisbane_rain_amount_day_0",
+   "state": "1 to 5 mm",
+   "attributes": {
+    "date": "2026-10-28",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Rain amount day 0"
+   },
+   "last_changed": "2026-10-28T13:03:06.069723+10:00",
+   "last_reported": "2026-10-28T13:03:06.069723+10:00",
+   "last_updated": "2026-10-28T13:03:06.069723+10:00",
+   "context": {
+    "id": "01M607C6JN8P14MGZWVXNP36CC",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_uv_index_day_0": {
+   "entity_id": "sensor.brisbane_uv_index_day_0",
+   "state": "11.0",
+   "attributes": {
+    "date": "2026-10-28",
+    "unit_of_measurement": "UV index",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane UV index day 0"
+   },
+   "last_changed": "2026-10-28T13:03:06.070008+10:00",
+   "last_reported": "2026-10-28T13:03:06.070008+10:00",
+   "last_updated": "2026-10-28T13:03:06.070008+10:00",
+   "context": {
+    "id": "01M607C6JP9NVFQ1DCXDMXS359",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_fire_danger_day_0": {
+   "entity_id": "sensor.brisbane_fire_danger_day_0",
+   "state": "Moderate",
+   "attributes": {
+    "date": "2026-10-28",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Fire danger day 0"
+   },
+   "last_changed": "2026-10-28T13:03:06.070341+10:00",
+   "last_reported": "2026-10-28T13:03:06.070341+10:00",
+   "last_updated": "2026-10-28T13:03:06.070341+10:00",
+   "context": {
+    "id": "01M607C6JP2G6XC8C7KRC423NC",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_max_temperature_day_1": {
+   "entity_id": "sensor.brisbane_max_temperature_day_1",
+   "state": "27.0",
+   "attributes": {
+    "date": "2026-10-29",
+    "unit_of_measurement": "°C",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "device_class": "temperature",
+    "friendly_name": "Brisbane Max temperature day 1"
+   },
+   "last_changed": "2026-10-28T13:03:06.070765+10:00",
+   "last_reported": "2026-10-28T13:03:06.070765+10:00",
+   "last_updated": "2026-10-28T13:03:06.070765+10:00",
+   "context": {
+    "id": "01M607C6JP7NX6BSGERK3V8Z8T",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_min_temperature_day_1": {
+   "entity_id": "sensor.brisbane_min_temperature_day_1",
+   "state": "17.0",
+   "attributes": {
+    "date": "2026-10-29",
+    "unit_of_measurement": "°C",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "device_class": "temperature",
+    "friendly_name": "Brisbane Min temperature day 1"
+   },
+   "last_changed": "2026-10-28T13:03:06.070952+10:00",
+   "last_reported": "2026-10-28T13:03:06.070952+10:00",
+   "last_updated": "2026-10-28T13:03:06.070952+10:00",
+   "context": {
+    "id": "01M607C6JP09MXKJWW0XFED07K",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_summary_day_1": {
+   "entity_id": "sensor.brisbane_summary_day_1",
+   "state": "Mostly sunny.",
+   "attributes": {
+    "date": "2026-10-29",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Summary day 1"
+   },
+   "last_changed": "2026-10-28T13:03:06.071103+10:00",
+   "last_reported": "2026-10-28T13:03:06.071103+10:00",
+   "last_updated": "2026-10-28T13:03:06.071103+10:00",
+   "context": {
+    "id": "01M607C6JQY5MAPFE8E0GZBQF0",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_forecast_day_1": {
+   "entity_id": "sensor.brisbane_forecast_day_1",
+   "state": "Mostly sunny. The chance of fog in the south in the early morning. Light winds becoming easterly 15 to 20 km/h in the early afternoon then becoming light in the evening. Overnight temperatures falling to between 13 and 16 with daytime temperatures reachi…",
+   "attributes": {
+    "date": "2026-10-29",
+    "text": "Mostly sunny. The chance of fog in the south in the early morning. Light winds becoming easterly 15 to 20 km/h in the early afternoon then becoming light in the evening. Overnight temperatures falling to between 13 and 16 with daytime temperatures reaching the mid to high 20s.",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Forecast day 1"
+   },
+   "last_changed": "2026-10-28T13:03:06.071254+10:00",
+   "last_reported": "2026-10-28T13:03:06.071254+10:00",
+   "last_updated": "2026-10-28T13:03:06.071254+10:00",
+   "context": {
+    "id": "01M607C6JQA1DPN4C5HWVDF4B9",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_chance_of_rain_day_1": {
+   "entity_id": "sensor.brisbane_chance_of_rain_day_1",
+   "state": "10",
+   "attributes": {
+    "date": "2026-10-29",
+    "unit_of_measurement": "%",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Chance of rain day 1"
+   },
+   "last_changed": "2026-10-28T13:03:06.071391+10:00",
+   "last_reported": "2026-10-28T13:03:06.071391+10:00",
+   "last_updated": "2026-10-28T13:03:06.071391+10:00",
+   "context": {
+    "id": "01M607C6JQ2HPX0YFKPRZ8XA4A",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_rain_amount_day_1": {
+   "entity_id": "sensor.brisbane_rain_amount_day_1",
+   "state": "0 mm",
+   "attributes": {
+    "date": "2026-10-29",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Rain amount day 1"
+   },
+   "last_changed": "2026-10-28T13:03:06.071522+10:00",
+   "last_reported": "2026-10-28T13:03:06.071522+10:00",
+   "last_updated": "2026-10-28T13:03:06.071522+10:00",
+   "context": {
+    "id": "01M607C6JQ5DW6JQV0GEQGPN5W",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_uv_index_day_1": {
+   "entity_id": "sensor.brisbane_uv_index_day_1",
+   "state": "11.0",
+   "attributes": {
+    "date": "2026-10-29",
+    "unit_of_measurement": "UV index",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane UV index day 1"
+   },
+   "last_changed": "2026-10-28T13:03:06.071788+10:00",
+   "last_reported": "2026-10-28T13:03:06.071788+10:00",
+   "last_updated": "2026-10-28T13:03:06.071788+10:00",
+   "context": {
+    "id": "01M607C6JQ44W4YQ5DYK72HKTK",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_fire_danger_day_1": {
+   "entity_id": "sensor.brisbane_fire_danger_day_1",
+   "state": "Moderate",
+   "attributes": {
+    "date": "2026-10-29",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Fire danger day 1"
+   },
+   "last_changed": "2026-10-28T13:03:06.072122+10:00",
+   "last_reported": "2026-10-28T13:03:06.072122+10:00",
+   "last_updated": "2026-10-28T13:03:06.072122+10:00",
+   "context": {
+    "id": "01M607C6JRCHW3N147GR0NXJSQ",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_max_temperature_day_2": {
+   "entity_id": "sensor.brisbane_max_temperature_day_2",
+   "state": "25.0",
+   "attributes": {
+    "date": "2026-10-30",
+    "unit_of_measurement": "°C",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "device_class": "temperature",
+    "friendly_name": "Brisbane Max temperature day 2"
+   },
+   "last_changed": "2026-10-28T13:03:06.072450+10:00",
+   "last_reported": "2026-10-28T13:03:06.072450+10:00",
+   "last_updated": "2026-10-28T13:03:06.072450+10:00",
+   "context": {
+    "id": "01M607C6JREEV23KWW1D770FT3",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_min_temperature_day_2": {
+   "entity_id": "sensor.brisbane_min_temperature_day_2",
+   "state": "18.0",
+   "attributes": {
+    "date": "2026-10-30",
+    "unit_of_measurement": "°C",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "device_class": "temperature",
+    "friendly_name": "Brisbane Min temperature day 2"
+   },
+   "last_changed": "2026-10-28T13:03:06.072618+10:00",
+   "last_reported": "2026-10-28T13:03:06.072618+10:00",
+   "last_updated": "2026-10-28T13:03:06.072618+10:00",
+   "context": {
+    "id": "01M607C6JRVHJRAQA9SE5R6GYR",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_summary_day_2": {
+   "entity_id": "sensor.brisbane_summary_day_2",
+   "state": "Partly cloudy.",
+   "attributes": {
+    "date": "2026-10-30",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Summary day 2"
+   },
+   "last_changed": "2026-10-28T13:03:06.072831+10:00",
+   "last_reported": "2026-10-28T13:03:06.072831+10:00",
+   "last_updated": "2026-10-28T13:03:06.072831+10:00",
+   "context": {
+    "id": "01M607C6JRM3Y4KEWYXEGEKCDJ",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_forecast_day_2": {
+   "entity_id": "sensor.brisbane_forecast_day_2",
+   "state": "Partly cloudy. Slight chance of a shower in the morning and afternoon. Light winds. Overnight temperatures falling to between 13 and 17 with daytime temperatures reaching the mid to high 20s.",
+   "attributes": {
+    "date": "2026-10-30",
+    "text": "Partly cloudy. Slight chance of a shower in the morning and afternoon. Light winds. Overnight temperatures falling to between 13 and 17 with daytime temperatures reaching the mid to high 20s.",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Forecast day 2"
+   },
+   "last_changed": "2026-10-28T13:03:06.073076+10:00",
+   "last_reported": "2026-10-28T13:03:06.073076+10:00",
+   "last_updated": "2026-10-28T13:03:06.073076+10:00",
+   "context": {
+    "id": "01M607C6JSVNGMHKMHN6Y8PCY2",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_chance_of_rain_day_2": {
+   "entity_id": "sensor.brisbane_chance_of_rain_day_2",
+   "state": "20",
+   "attributes": {
+    "date": "2026-10-30",
+    "unit_of_measurement": "%",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Chance of rain day 2"
+   },
+   "last_changed": "2026-10-28T13:03:06.073594+10:00",
+   "last_reported": "2026-10-28T13:03:06.073594+10:00",
+   "last_updated": "2026-10-28T13:03:06.073594+10:00",
+   "context": {
+    "id": "01M607C6JS570DVQYS1DVCG9E6",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_rain_amount_day_2": {
+   "entity_id": "sensor.brisbane_rain_amount_day_2",
+   "state": "0 mm",
+   "attributes": {
+    "date": "2026-10-30",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Rain amount day 2"
+   },
+   "last_changed": "2026-10-28T13:03:06.073816+10:00",
+   "last_reported": "2026-10-28T13:03:06.073816+10:00",
+   "last_updated": "2026-10-28T13:03:06.073816+10:00",
+   "context": {
+    "id": "01M607C6JSWAXW252NHS0DZ8AP",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_uv_index_day_2": {
+   "entity_id": "sensor.brisbane_uv_index_day_2",
+   "state": "11.0",
+   "attributes": {
+    "date": "2026-10-30",
+    "unit_of_measurement": "UV index",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane UV index day 2"
+   },
+   "last_changed": "2026-10-28T13:03:06.074165+10:00",
+   "last_reported": "2026-10-28T13:03:06.074165+10:00",
+   "last_updated": "2026-10-28T13:03:06.074165+10:00",
+   "context": {
+    "id": "01M607C6JTGFTW7309ED5XY654",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_fire_danger_day_2": {
+   "entity_id": "sensor.brisbane_fire_danger_day_2",
+   "state": "Moderate",
+   "attributes": {
+    "date": "2026-10-30",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Fire danger day 2"
+   },
+   "last_changed": "2026-10-28T13:03:06.074562+10:00",
+   "last_reported": "2026-10-28T13:03:06.074562+10:00",
+   "last_updated": "2026-10-28T13:03:06.074562+10:00",
+   "context": {
+    "id": "01M607C6JTV2FXX56K18KJTY40",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "sensor.brisbane_warnings": {
+   "entity_id": "sensor.brisbane_warnings",
+   "state": "0",
+   "attributes": {
+    "state_class": "measurement",
+    "warnings": [],
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane Warnings"
+   },
+   "last_changed": "2026-10-28T13:03:06.075284+10:00",
+   "last_reported": "2026-10-28T13:28:05.471228+10:00",
+   "last_updated": "2026-10-28T13:03:06.075284+10:00",
+   "context": {
+    "id": "01M607C6JVR9JGEVR59ZBHRNW7",
+    "parent_id": null,
+    "user_id": null
+   }
+  },
+  "weather.brisbane": {
+   "entity_id": "weather.brisbane",
+   "state": "rainy",
+   "attributes": {
+    "temperature": 24.4,
+    "apparent_temperature": 24.0,
+    "dew_point": 12.4,
+    "temperature_unit": "°C",
+    "humidity": 47,
+    "uv_index": 9.0,
+    "pressure": 1016.2,
+    "pressure_unit": "hPa",
+    "wind_bearing": 277.0,
+    "wind_gust_speed": 9.0,
+    "wind_speed": 6.0,
+    "wind_speed_unit": "km/h",
+    "visibility_unit": "km",
+    "precipitation_unit": "mm",
+    "attribution": "Data provided by the Australian Bureau of Meteorology",
+    "friendly_name": "Brisbane",
+    "supported_features": 3
+   },
+   "last_changed": "2026-10-28T13:03:06.075920+10:00",
+   "last_reported": "2026-10-28T13:23:06.143717+10:00",
+   "last_updated": "2026-10-28T13:23:06.143717+10:00",
+   "context": {
+    "id": "01M608GTGZ197NMKCH8N9B6Z4B",
+    "parent_id": null,
+    "user_id": null
+   }
+  }
+ },
+ "forecast": {
+  "daily": [
+   {
+    "datetime": "2026-10-28T00:00:00+10:00",
+    "condition": "rainy",
+    "precipitation_probability": 50,
+    "uv_index": 11.0,
+    "temperature": 29.0,
+    "precipitation": 5.0
+   },
+   {
+    "datetime": "2026-10-29T00:00:00+10:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 10,
+    "uv_index": 11.0,
+    "temperature": 27.0,
+    "templow": 17.0
+   },
+   {
+    "datetime": "2026-10-30T00:00:00+10:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 20,
+    "uv_index": 11.0,
+    "temperature": 25.0,
+    "templow": 18.0
+   },
+   {
+    "datetime": "2026-10-31T00:00:00+10:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 30,
+    "uv_index": 11.0,
+    "temperature": 25.0,
+    "templow": 18.0,
+    "precipitation": 1.0
+   },
+   {
+    "datetime": "2026-11-01T00:00:00+10:00",
+    "condition": "rainy",
+    "precipitation_probability": 60,
+    "uv_index": null,
+    "temperature": 28.0,
+    "templow": 17.0,
+    "precipitation": 6.0
+   },
+   {
+    "datetime": "2026-11-02T00:00:00+10:00",
+    "condition": "rainy",
+    "precipitation_probability": 50,
+    "uv_index": null,
+    "temperature": 28.0,
+    "templow": 18.0,
+    "precipitation": 3.0
+   },
+   {
+    "datetime": "2026-11-03T00:00:00+10:00",
+    "condition": "rainy",
+    "precipitation_probability": 40,
+    "uv_index": null,
+    "temperature": 27.0,
+    "templow": 19.0,
+    "precipitation": 3.0
+   }
+  ],
+  "hourly": [
+   {
+    "datetime": "2026-10-28T03:00:00+00:00",
+    "condition": "rainy",
+    "precipitation_probability": 40,
+    "wind_bearing": 225.0,
+    "uv_index": 9.0,
+    "temperature": 29.0,
+    "apparent_temperature": 28.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 17.0,
+    "wind_speed": 11.0,
+    "precipitation": 2.0,
+    "humidity": 44
+   },
+   {
+    "datetime": "2026-10-28T04:00:00+00:00",
+    "condition": "rainy",
+    "precipitation_probability": 40,
+    "wind_bearing": 225.0,
+    "uv_index": 6.0,
+    "temperature": 28.0,
+    "apparent_temperature": 27.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 19.0,
+    "wind_speed": 11.0,
+    "precipitation": 2.0,
+    "humidity": 47
+   },
+   {
+    "datetime": "2026-10-28T05:00:00+00:00",
+    "condition": "rainy",
+    "precipitation_probability": 40,
+    "wind_bearing": 225.0,
+    "uv_index": 3.0,
+    "temperature": 27.0,
+    "apparent_temperature": 26.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 19.0,
+    "wind_speed": 11.0,
+    "precipitation": 2.0,
+    "humidity": 52
+   },
+   {
+    "datetime": "2026-10-28T06:00:00+00:00",
+    "condition": "rainy",
+    "precipitation_probability": 20,
+    "wind_bearing": 225.0,
+    "uv_index": 1.0,
+    "temperature": 25.0,
+    "apparent_temperature": 25.0,
+    "dew_point": 17.0,
+    "wind_gust_speed": 19.0,
+    "wind_speed": 11.0,
+    "humidity": 62
+   },
+   {
+    "datetime": "2026-10-28T07:00:00+00:00",
+    "condition": "rainy",
+    "precipitation_probability": 20,
+    "wind_bearing": 225.0,
+    "uv_index": 1.0,
+    "temperature": 24.0,
+    "apparent_temperature": 24.0,
+    "dew_point": 17.0,
+    "wind_gust_speed": 17.0,
+    "wind_speed": 11.0,
+    "humidity": 67
+   },
+   {
+    "datetime": "2026-10-28T08:00:00+00:00",
+    "condition": "rainy",
+    "precipitation_probability": 20,
+    "wind_bearing": 270.0,
+    "uv_index": 0.0,
+    "temperature": 23.0,
+    "apparent_temperature": 23.0,
+    "dew_point": 17.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 9.0,
+    "humidity": 72
+   },
+   {
+    "datetime": "2026-10-28T09:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 10,
+    "wind_bearing": 292.5,
+    "uv_index": 0.0,
+    "temperature": 22.0,
+    "apparent_temperature": 23.0,
+    "dew_point": 17.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 9.0,
+    "humidity": 75
+   },
+   {
+    "datetime": "2026-10-28T10:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 10,
+    "wind_bearing": 270.0,
+    "uv_index": 0.0,
+    "temperature": 21.0,
+    "apparent_temperature": 22.0,
+    "dew_point": 17.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 7.0,
+    "humidity": 78
+   },
+   {
+    "datetime": "2026-10-28T11:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 10,
+    "wind_bearing": 270.0,
+    "uv_index": 0.0,
+    "temperature": 21.0,
+    "apparent_temperature": 21.0,
+    "dew_point": 17.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 7.0,
+    "humidity": 81
+   },
+   {
+    "datetime": "2026-10-28T12:00:00+00:00",
+    "condition": "clear-night",
+    "precipitation_probability": 5,
+    "wind_bearing": 270.0,
+    "uv_index": 0.0,
+    "temperature": 20.0,
+    "apparent_temperature": 20.0,
+    "dew_point": 17.0,
+    "wind_gust_speed": 13.0,
+    "wind_speed": 7.0,
+    "humidity": 84
+   },
+   {
+    "datetime": "2026-10-28T13:00:00+00:00",
+    "condition": "clear-night",
+    "precipitation_probability": 5,
+    "wind_bearing": 247.5,
+    "uv_index": 0.0,
+    "temperature": 19.0,
+    "apparent_temperature": 20.0,
+    "dew_point": 17.0,
+    "wind_gust_speed": 13.0,
+    "wind_speed": 7.0,
+    "humidity": 85
+   },
+   {
+    "datetime": "2026-10-28T14:00:00+00:00",
+    "condition": "clear-night",
+    "precipitation_probability": 5,
+    "wind_bearing": 247.5,
+    "uv_index": 0.0,
+    "temperature": 19.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 13.0,
+    "wind_speed": 7.0,
+    "humidity": 86
+   },
+   {
+    "datetime": "2026-10-28T15:00:00+00:00",
+    "condition": "clear-night",
+    "precipitation_probability": 5,
+    "wind_bearing": 270.0,
+    "uv_index": 0.0,
+    "temperature": 18.0,
+    "apparent_temperature": 18.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 13.0,
+    "wind_speed": 7.0,
+    "humidity": 88
+   },
+   {
+    "datetime": "2026-10-28T16:00:00+00:00",
+    "condition": "clear-night",
+    "precipitation_probability": 5,
+    "wind_bearing": 247.5,
+    "uv_index": 0.0,
+    "temperature": 18.0,
+    "apparent_temperature": 18.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 13.0,
+    "wind_speed": 7.0,
+    "humidity": 88
+   },
+   {
+    "datetime": "2026-10-28T17:00:00+00:00",
+    "condition": "clear-night",
+    "precipitation_probability": 5,
+    "wind_bearing": 225.0,
+    "uv_index": 0.0,
+    "temperature": 17.0,
+    "apparent_temperature": 17.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 13.0,
+    "wind_speed": 7.0,
+    "humidity": 90
+   },
+   {
+    "datetime": "2026-10-28T18:00:00+00:00",
+    "condition": "clear-night",
+    "precipitation_probability": 5,
+    "wind_bearing": 225.0,
+    "uv_index": 0.0,
+    "temperature": 17.0,
+    "apparent_temperature": 17.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 7.0,
+    "humidity": 90
+   },
+   {
+    "datetime": "2026-10-28T19:00:00+00:00",
+    "condition": "sunny",
+    "precipitation_probability": 5,
+    "wind_bearing": 202.5,
+    "uv_index": 0.0,
+    "temperature": 17.0,
+    "apparent_temperature": 17.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 9.0,
+    "humidity": 88
+   },
+   {
+    "datetime": "2026-10-28T20:00:00+00:00",
+    "condition": "sunny",
+    "precipitation_probability": 5,
+    "wind_bearing": 202.5,
+    "uv_index": 1.0,
+    "temperature": 18.0,
+    "apparent_temperature": 18.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 9.0,
+    "humidity": 82
+   },
+   {
+    "datetime": "2026-10-28T21:00:00+00:00",
+    "condition": "sunny",
+    "precipitation_probability": 5,
+    "wind_bearing": 202.5,
+    "uv_index": 1.0,
+    "temperature": 21.0,
+    "apparent_temperature": 21.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 17.0,
+    "wind_speed": 9.0,
+    "humidity": 71
+   },
+   {
+    "datetime": "2026-10-28T22:00:00+00:00",
+    "condition": "sunny",
+    "precipitation_probability": 5,
+    "wind_bearing": 180.0,
+    "uv_index": 4.0,
+    "temperature": 23.0,
+    "apparent_temperature": 23.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 19.0,
+    "wind_speed": 11.0,
+    "humidity": 62
+   },
+   {
+    "datetime": "2026-10-28T23:00:00+00:00",
+    "condition": "sunny",
+    "precipitation_probability": 5,
+    "wind_bearing": 157.5,
+    "uv_index": 7.0,
+    "temperature": 25.0,
+    "apparent_temperature": 24.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 19.0,
+    "wind_speed": 11.0,
+    "humidity": 56
+   },
+   {
+    "datetime": "2026-10-29T00:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 135.0,
+    "uv_index": 9.0,
+    "temperature": 25.0,
+    "apparent_temperature": 25.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 30.0,
+    "wind_speed": 20.0,
+    "humidity": 54
+   },
+   {
+    "datetime": "2026-10-29T01:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 112.5,
+    "uv_index": 11.0,
+    "temperature": 26.0,
+    "apparent_temperature": 25.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 30.0,
+    "wind_speed": 20.0,
+    "humidity": 51
+   },
+   {
+    "datetime": "2026-10-29T02:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 112.5,
+    "uv_index": 11.0,
+    "temperature": 27.0,
+    "apparent_temperature": 25.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 30.0,
+    "wind_speed": 20.0,
+    "humidity": 49
+   },
+   {
+    "datetime": "2026-10-29T03:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 90.0,
+    "uv_index": 9.0,
+    "temperature": 27.0,
+    "apparent_temperature": 25.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 30.0,
+    "wind_speed": 20.0,
+    "humidity": 48
+   },
+   {
+    "datetime": "2026-10-29T04:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 90.0,
+    "uv_index": 6.0,
+    "temperature": 26.0,
+    "apparent_temperature": 25.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 30.0,
+    "wind_speed": 20.0,
+    "humidity": 50
+   },
+   {
+    "datetime": "2026-10-29T05:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 90.0,
+    "uv_index": 3.0,
+    "temperature": 25.0,
+    "apparent_temperature": 24.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 31.0,
+    "wind_speed": 22.0,
+    "humidity": 54
+   },
+   {
+    "datetime": "2026-10-29T06:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 90.0,
+    "uv_index": 1.0,
+    "temperature": 24.0,
+    "apparent_temperature": 23.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 30.0,
+    "wind_speed": 20.0,
+    "humidity": 58
+   },
+   {
+    "datetime": "2026-10-29T07:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 90.0,
+    "uv_index": 1.0,
+    "temperature": 23.0,
+    "apparent_temperature": 22.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 31.0,
+    "wind_speed": 22.0,
+    "humidity": 62
+   },
+   {
+    "datetime": "2026-10-29T08:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 90.0,
+    "uv_index": 0.0,
+    "temperature": 22.0,
+    "apparent_temperature": 21.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 31.0,
+    "wind_speed": 22.0,
+    "humidity": 67
+   },
+   {
+    "datetime": "2026-10-29T09:00:00+00:00",
+    "condition": "clear-night",
+    "precipitation_probability": 0,
+    "wind_bearing": 90.0,
+    "uv_index": 0.0,
+    "temperature": 21.0,
+    "apparent_temperature": 20.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 31.0,
+    "wind_speed": 22.0,
+    "humidity": 71
+   },
+   {
+    "datetime": "2026-10-29T10:00:00+00:00",
+    "condition": "clear-night",
+    "precipitation_probability": 0,
+    "wind_bearing": 90.0,
+    "uv_index": 0.0,
+    "temperature": 21.0,
+    "apparent_temperature": 20.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 30.0,
+    "wind_speed": 20.0,
+    "humidity": 73
+   },
+   {
+    "datetime": "2026-10-29T11:00:00+00:00",
+    "condition": "clear-night",
+    "precipitation_probability": 0,
+    "wind_bearing": 90.0,
+    "uv_index": 0.0,
+    "temperature": 20.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 30.0,
+    "wind_speed": 20.0,
+    "humidity": 74
+   },
+   {
+    "datetime": "2026-10-29T12:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 90.0,
+    "uv_index": 0.0,
+    "temperature": 20.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 30.0,
+    "wind_speed": 20.0,
+    "humidity": 76
+   },
+   {
+    "datetime": "2026-10-29T13:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 112.5,
+    "uv_index": 0.0,
+    "temperature": 19.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 28.0,
+    "wind_speed": 19.0,
+    "humidity": 78
+   },
+   {
+    "datetime": "2026-10-29T14:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 112.5,
+    "uv_index": 0.0,
+    "temperature": 19.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 28.0,
+    "wind_speed": 19.0,
+    "humidity": 79
+   },
+   {
+    "datetime": "2026-10-29T15:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 135.0,
+    "uv_index": 0.0,
+    "temperature": 19.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 28.0,
+    "wind_speed": 19.0,
+    "humidity": 80
+   },
+   {
+    "datetime": "2026-10-29T16:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 135.0,
+    "uv_index": 0.0,
+    "temperature": 19.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 26.0,
+    "wind_speed": 19.0,
+    "humidity": 82
+   },
+   {
+    "datetime": "2026-10-29T17:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 157.5,
+    "uv_index": 0.0,
+    "temperature": 18.0,
+    "apparent_temperature": 18.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 9.0,
+    "humidity": 84
+   },
+   {
+    "datetime": "2026-10-29T18:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 180.0,
+    "uv_index": 0.0,
+    "temperature": 18.0,
+    "apparent_temperature": 18.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 7.0,
+    "humidity": 87
+   },
+   {
+    "datetime": "2026-10-29T19:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 180.0,
+    "uv_index": 0.0,
+    "temperature": 18.0,
+    "apparent_temperature": 18.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 7.0,
+    "humidity": 87
+   },
+   {
+    "datetime": "2026-10-29T20:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 180.0,
+    "uv_index": 1.0,
+    "temperature": 19.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 13.0,
+    "wind_speed": 7.0,
+    "humidity": 83
+   },
+   {
+    "datetime": "2026-10-29T21:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 10,
+    "wind_bearing": 180.0,
+    "uv_index": 1.0,
+    "temperature": 21.0,
+    "apparent_temperature": 22.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 13.0,
+    "wind_speed": 7.0,
+    "humidity": 73
+   },
+   {
+    "datetime": "2026-10-29T22:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 10,
+    "wind_bearing": 157.5,
+    "uv_index": 4.0,
+    "temperature": 23.0,
+    "apparent_temperature": 23.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 13.0,
+    "wind_speed": 7.0,
+    "humidity": 64
+   },
+   {
+    "datetime": "2026-10-29T23:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 10,
+    "wind_bearing": 112.5,
+    "uv_index": 7.0,
+    "temperature": 24.0,
+    "apparent_temperature": 24.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 20.0,
+    "wind_speed": 13.0,
+    "humidity": 59
+   },
+   {
+    "datetime": "2026-10-30T00:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 90.0,
+    "uv_index": 9.0,
+    "temperature": 25.0,
+    "apparent_temperature": 24.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 20.0,
+    "wind_speed": 13.0,
+    "humidity": 56
+   },
+   {
+    "datetime": "2026-10-30T01:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 90.0,
+    "uv_index": 11.0,
+    "temperature": 25.0,
+    "apparent_temperature": 25.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 20.0,
+    "wind_speed": 13.0,
+    "humidity": 55
+   },
+   {
+    "datetime": "2026-10-30T02:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 90.0,
+    "uv_index": 10.0,
+    "temperature": 25.0,
+    "apparent_temperature": 25.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 20.0,
+    "wind_speed": 13.0,
+    "humidity": 52
+   },
+   {
+    "datetime": "2026-10-30T03:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 90.0,
+    "uv_index": 9.0,
+    "temperature": 25.0,
+    "apparent_temperature": 24.0,
+    "dew_point": 14.0,
+    "wind_gust_speed": 22.0,
+    "wind_speed": 15.0,
+    "humidity": 51
+   },
+   {
+    "datetime": "2026-10-30T04:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 90.0,
+    "uv_index": 6.0,
+    "temperature": 25.0,
+    "apparent_temperature": 24.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 22.0,
+    "wind_speed": 15.0,
+    "humidity": 53
+   },
+   {
+    "datetime": "2026-10-30T05:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 90.0,
+    "uv_index": 3.0,
+    "temperature": 24.0,
+    "apparent_temperature": 23.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 24.0,
+    "wind_speed": 15.0,
+    "humidity": 55
+   },
+   {
+    "datetime": "2026-10-30T06:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 90.0,
+    "uv_index": 1.0,
+    "temperature": 23.0,
+    "apparent_temperature": 22.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 24.0,
+    "wind_speed": 15.0,
+    "humidity": 58
+   },
+   {
+    "datetime": "2026-10-30T07:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 67.5,
+    "uv_index": 1.0,
+    "temperature": 23.0,
+    "apparent_temperature": 21.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 26.0,
+    "wind_speed": 17.0,
+    "humidity": 62
+   },
+   {
+    "datetime": "2026-10-30T08:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 67.5,
+    "uv_index": 0.0,
+    "temperature": 21.0,
+    "apparent_temperature": 21.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 26.0,
+    "wind_speed": 19.0,
+    "humidity": 67
+   },
+   {
+    "datetime": "2026-10-30T09:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 67.5,
+    "uv_index": 0.0,
+    "temperature": 21.0,
+    "apparent_temperature": 20.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 28.0,
+    "wind_speed": 19.0,
+    "humidity": 73
+   },
+   {
+    "datetime": "2026-10-30T10:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 67.5,
+    "uv_index": 0.0,
+    "temperature": 20.0,
+    "apparent_temperature": 20.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 28.0,
+    "wind_speed": 19.0,
+    "humidity": 75
+   },
+   {
+    "datetime": "2026-10-30T11:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 67.5,
+    "uv_index": 0.0,
+    "temperature": 20.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 28.0,
+    "wind_speed": 19.0,
+    "humidity": 76
+   },
+   {
+    "datetime": "2026-10-30T12:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 67.5,
+    "uv_index": 0.0,
+    "temperature": 20.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 30.0,
+    "wind_speed": 20.0,
+    "humidity": 77
+   },
+   {
+    "datetime": "2026-10-30T13:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 67.5,
+    "uv_index": 0.0,
+    "temperature": 19.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 28.0,
+    "wind_speed": 19.0,
+    "humidity": 80
+   },
+   {
+    "datetime": "2026-10-30T14:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 5,
+    "wind_bearing": 45.0,
+    "uv_index": 0.0,
+    "temperature": 19.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 28.0,
+    "wind_speed": 19.0,
+    "humidity": 81
+   },
+   {
+    "datetime": "2026-10-30T15:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 10,
+    "wind_bearing": 45.0,
+    "uv_index": 0.0,
+    "temperature": 19.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 26.0,
+    "wind_speed": 19.0,
+    "humidity": 81
+   },
+   {
+    "datetime": "2026-10-30T16:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 10,
+    "wind_bearing": 45.0,
+    "uv_index": 0.0,
+    "temperature": 19.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 26.0,
+    "wind_speed": 19.0,
+    "humidity": 83
+   },
+   {
+    "datetime": "2026-10-30T17:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 10,
+    "wind_bearing": 22.5,
+    "uv_index": 0.0,
+    "temperature": 19.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 9.0,
+    "humidity": 84
+   },
+   {
+    "datetime": "2026-10-30T18:00:00+00:00",
+    "condition": "rainy",
+    "precipitation_probability": 20,
+    "wind_bearing": 0.0,
+    "uv_index": 0.0,
+    "temperature": 19.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 7.0,
+    "humidity": 85
+   },
+   {
+    "datetime": "2026-10-30T19:00:00+00:00",
+    "condition": "rainy",
+    "precipitation_probability": 20,
+    "wind_bearing": 0.0,
+    "uv_index": 0.0,
+    "temperature": 18.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 7.0,
+    "humidity": 88
+   },
+   {
+    "datetime": "2026-10-30T20:00:00+00:00",
+    "condition": "rainy",
+    "precipitation_probability": 20,
+    "wind_bearing": 0.0,
+    "uv_index": 1.0,
+    "temperature": 19.0,
+    "apparent_temperature": 19.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 7.0,
+    "humidity": 86
+   },
+   {
+    "datetime": "2026-10-30T21:00:00+00:00",
+    "condition": "rainy",
+    "precipitation_probability": 20,
+    "wind_bearing": 0.0,
+    "uv_index": 1.0,
+    "temperature": 21.0,
+    "apparent_temperature": 22.0,
+    "dew_point": 17.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 7.0,
+    "humidity": 76
+   },
+   {
+    "datetime": "2026-10-30T22:00:00+00:00",
+    "condition": "rainy",
+    "precipitation_probability": 20,
+    "wind_bearing": 22.5,
+    "uv_index": 4.0,
+    "temperature": 23.0,
+    "apparent_temperature": 24.0,
+    "dew_point": 17.0,
+    "wind_gust_speed": 15.0,
+    "wind_speed": 9.0,
+    "humidity": 67
+   },
+   {
+    "datetime": "2026-10-30T23:00:00+00:00",
+    "condition": "rainy",
+    "precipitation_probability": 20,
+    "wind_bearing": 45.0,
+    "uv_index": 7.0,
+    "temperature": 24.0,
+    "apparent_temperature": 24.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 24.0,
+    "wind_speed": 17.0,
+    "humidity": 62
+   },
+   {
+    "datetime": "2026-10-31T00:00:00+00:00",
+    "condition": "rainy",
+    "precipitation_probability": 20,
+    "wind_bearing": 45.0,
+    "uv_index": 9.0,
+    "temperature": 24.0,
+    "apparent_temperature": 24.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 22.0,
+    "wind_speed": 15.0,
+    "humidity": 60
+   },
+   {
+    "datetime": "2026-10-31T01:00:00+00:00",
+    "condition": "rainy",
+    "precipitation_probability": 20,
+    "wind_bearing": 45.0,
+    "uv_index": 11.0,
+    "temperature": 25.0,
+    "apparent_temperature": 24.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 24.0,
+    "wind_speed": 17.0,
+    "humidity": 58
+   },
+   {
+    "datetime": "2026-10-31T02:00:00+00:00",
+    "condition": "rainy",
+    "precipitation_probability": 20,
+    "wind_bearing": 45.0,
+    "uv_index": 10.0,
+    "temperature": 25.0,
+    "apparent_temperature": 25.0,
+    "dew_point": 16.0,
+    "wind_gust_speed": 24.0,
+    "wind_speed": 17.0,
+    "humidity": 55
+   },
+   {
+    "datetime": "2026-10-31T03:00:00+00:00",
+    "condition": "partlycloudy",
+    "precipitation_probability": 10,
+    "wind_bearing": 45.0,
+    "uv_index": 9.0,
+    "temperature": 25.0,
+    "apparent_temperature": 24.0,
+    "dew_point": 15.0,
+    "wind_gust_speed": 26.0,
+    "wind_speed": 17.0,
+    "humidity": 54
+   }
+  ]
+ },
+ "devices": {
+  "6948db47010bde580b43abafc0db7053": {
+   "id": "6948db47010bde580b43abafc0db7053",
+   "name": "Brisbane",
+   "config_entries": [
+    "01M60791WERMXXBBJ98485MJPX"
+   ],
+   "identifiers": [
+    [
+     "bom_australia",
+     "01M60791WERMXXBBJ98485MJPX"
+    ]
+   ]
+  }
+ }
+}

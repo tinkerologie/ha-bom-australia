@@ -1,15 +1,27 @@
 {
   "domain": "bom_australia",
   "name": "Bureau of Meteorology (Australia)",
-  "codeowners": ["@ruaan-deysel"],
+  "after_dependencies": [
+    "frontend",
+    "http",
+    "lovelace"
+  ],
+  "codeowners": [
+    "@ruaan-deysel"
+  ],
   "config_flow": true,
   "dependencies": [],
   "documentation": "https://github.com/tinkerologie/ha-bom-australia",
   "integration_type": "service",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/tinkerologie/ha-bom-australia/issues",
-  "loggers": ["bom_weather_api", "aioftp"],
+  "loggers": [
+    "bom_weather_api",
+    "aioftp"
+  ],
   "quality_scale": "gold",
-  "requirements": ["bom-weather-api==0.2.0"],
+  "requirements": [
+    "bom-weather-api==0.2.0"
+  ],
   "version": "2026.10.0"
 }
