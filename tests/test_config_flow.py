@@ -49,7 +49,17 @@ async def test_full_flow(hass: HomeAssistant, mock_client: MagicMock) -> None:
     assert result["step_id"] == "station"
     assert result["description_placeholders"] == {"location": "Brisbane"}
     options = result["data_schema"].schema[CONF_STATION_ID].config["options"]
-    assert options[0] == {"value": "040913", "label": "Brisbane (0 km)"}
+    # Stations with complete observations come first, nearest first; the beacon
+    # and portable station are listed last with what they do not report.
+    assert [option["label"] for option in options] == [
+        "Brisbane (0 km)",
+        "Archerfield (10.6 km)",
+        "Brisbane Airport (13.3 km)",
+        "Toowoomba (111.2 km)",
+        "Inner Beacon (31.4 km) - no temperature, humidity, pressure",
+        "PORTABLE QFDB BR (33 km) - no wind, pressure",
+    ]
+    assert result["data_schema"]({})[CONF_STATION_ID] == "040913"
 
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"], {CONF_STATION_ID: "040913"}

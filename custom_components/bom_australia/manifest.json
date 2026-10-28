@@ -10,6 +10,6 @@
   "issue_tracker": "https://github.com/tinkerologie/ha-bom-australia/issues",
   "loggers": ["bom_weather_api", "aioftp"],
   "quality_scale": "gold",
-  "requirements": ["bom-weather-api==0.1.0"],
+  "requirements": ["bom-weather-api==0.2.0"],
   "version": "2026.10.0"
 }

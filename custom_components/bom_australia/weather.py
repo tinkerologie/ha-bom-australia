@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 from typing import TYPE_CHECKING, override
 
 from bom_weather_api import DailyForecastDay, HourlyForecastPoint, Observation
@@ -188,7 +188,10 @@ class BomWeather(
             return None
         return [
             Forecast(
-                datetime=day.start.isoformat(),
+                # Day 0 starts at the issue time; report every day from local midnight.
+                datetime=datetime.combine(
+                    day.date, time.min, day.start.tzinfo
+                ).isoformat(),
                 condition=map_condition(day.icon_descriptor, is_night=False),
                 native_temperature=day.temp_max,
                 native_templow=day.temp_min,

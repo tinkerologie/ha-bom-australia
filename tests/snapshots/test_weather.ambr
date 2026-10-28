@@ -5,7 +5,7 @@
       'forecast': list([
         dict({
           'condition': 'rainy',
-          'datetime': '2026-10-28T09:00:00+10:00',
+          'datetime': '2026-10-28T00:00:00+10:00',
           'precipitation': 6.0,
           'precipitation_probability': 50,
           'temperature': 29.0,
