@@ -613,16 +613,16 @@ wheels = [
 
 [[package]]
 name = "bom-weather-api"
-version = "0.1.0"
+version = "0.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aioftp" },
     { name = "aiohttp" },
     { name = "defusedxml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/01/dd/ca696d536c52fa59c09424ae8db9bb0abfc0e943cbc824065cd2a4b0766a/bom_weather_api-0.1.0.tar.gz", hash = "sha256:c502970549475bcbbeecf7f797da774439a147ac7603dfb8b791ce39e10fb596", size = 36585, upload-time = "2026-10-28T02:47:38.441Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/91/1f/e0031762e99a3070bc0f7d858a13f7ebd337a04fa5e88375d4b9a9e64f7f/bom_weather_api-0.2.0.tar.gz", hash = "sha256:83b5864caf4546315f04d5ca65954ae5243d7364eedb430efccdc3a763746ec6", size = 37372, upload-time = "2026-10-28T03:20:06.304Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f3/67/7661a75e5f2962e523d232f418c060062e59c9792d36b01007c289c10cd7/bom_weather_api-0.1.0-py3-none-any.whl", hash = "sha256:0cd03f682b99d2b6178d83f055474a1e74d689014d80024cbb59e92afee0a643", size = 24452, upload-time = "2026-10-28T02:47:37.066Z" },
+    { url = "https://files.pythonhosted.org/packages/53/23/730d71e3c88413814fe79cbdd825bc4738af60c04b7e5142468c72f7693a/bom_weather_api-0.2.0-py3-none-any.whl", hash = "sha256:075750b6f078db2e21e9e18d42d98ef7fc6a25ce43b335e8279e3ce96c084e77", size = 24730, upload-time = "2026-10-28T03:20:04.782Z" },
 ]
 
 [[package]]
@@ -1280,7 +1280,7 @@ test = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "bom-weather-api", specifier = "==0.1.0" },
+    { name = "bom-weather-api", specifier = "==0.2.0" },
     { name = "freezegun", specifier = "==1.5.5" },
     { name = "mypy", specifier = "==2.4.0" },
     { name = "pre-commit", specifier = "==4.7.0" },
@@ -1290,7 +1290,7 @@ dev = [
     { name = "syrupy", specifier = "==6.1.1" },
 ]
 test = [
-    { name = "bom-weather-api", specifier = "==0.1.0" },
+    { name = "bom-weather-api", specifier = "==0.2.0" },
     { name = "freezegun", specifier = "==1.5.5" },
     { name = "pytest-cov", specifier = "==7.1.0" },
     { name = "pytest-homeassistant-custom-component", specifier = "==0.13.375" },

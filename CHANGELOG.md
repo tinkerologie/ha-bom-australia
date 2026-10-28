@@ -6,6 +6,20 @@ project uses Home Assistant style versions (`YYYY.M.PATCH`).
 
 ## [Unreleased]
 
+### Fixed
+
+- Setup now defaults to the nearest station with complete observations.
+  Previously it chose the nearest station, which can be a beacon or portable
+  unit that reports no wind or pressure (for example near Redcliffe, QLD).
+  Partial stations are still offered, listed last and labelled with what they
+  do not report.
+- Daily forecasts start at local midnight; today's forecast previously used
+  the issue time.
+
+### Changed
+
+- Requires `bom-weather-api` 0.2.0.
+
 ## [2026.10.0] - 2026-10-28
 
 ### Added

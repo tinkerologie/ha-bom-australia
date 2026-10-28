@@ -44,10 +44,12 @@ from .const import (
     CONF_STATION_ID,
     CONF_STATION_NAME,
     CONF_TIMEZONE,
+    CORE_MEASUREMENTS,
     DEFAULT_FORECAST_DAYS,
     DOMAIN,
     LOCATION_CHOICES,
     MAX_FORECAST_DAYS,
+    REPORTED_MEASUREMENTS,
     STATION_CHOICES,
 )
 from .coordinator import location_from_entry
@@ -56,6 +58,14 @@ if TYPE_CHECKING:
     from .coordinator import BomConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
+
+
+def _station_label(station: Station, distance: float) -> str:
+    """Label a station, noting which measurements it does not report."""
+    label = f"{station.name} ({distance:g} km)"
+    if missing := [m for m in REPORTED_MEASUREMENTS if m not in station.observes]:
+        label += f" - no {', '.join(missing)}"
+    return label
 
 
 def _select(options: list[SelectOptionDict]) -> SelectSelector:
@@ -167,13 +177,25 @@ class BomConfigFlow(ConfigFlow, domain=DOMAIN):
 
     async def _load_stations(self, town: ForecastLocation) -> None:
         stations = await self.client.get_stations(town.product_state)
-        nearest = BomClient.nearest(town.coordinate, stations, limit=STATION_CHOICES)
-        self._stations = {station.id: station for station, _ in nearest}
+        # List stations with complete observations first: the nearest
+        # station is often a beacon or portable unit that only reports part
+        # of an observation. Stations reporting nothing are left out.
+        nearest = BomClient.nearest(
+            town.coordinate,
+            (station for station in stations if station.observes),
+            limit=STATION_CHOICES * 2,
+        )
+        ranked = sorted(
+            nearest,
+            key=lambda pair: (
+                not pair[0].observes.issuperset(CORE_MEASUREMENTS),
+                pair[1],
+            ),
+        )[:STATION_CHOICES]
+        self._stations = {station.id: station for station, _ in ranked}
         self._station_options = [
-            SelectOptionDict(
-                value=station.id, label=f"{station.name} ({distance:g} km)"
-            )
-            for station, distance in nearest
+            SelectOptionDict(value=station.id, label=_station_label(station, distance))
+            for station, distance in ranked
         ]
 
     async def _validate_station(self, station: Station) -> str | None:

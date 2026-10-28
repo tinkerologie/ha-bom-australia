@@ -39,6 +39,11 @@ MAX_FORECAST_DAYS: Final = 7
 LOCATION_CHOICES: Final = 15
 STATION_CHOICES: Final = 10
 
+# A station must report these to be offered first; REPORTED_MEASUREMENTS are
+# listed in station labels when missing.
+CORE_MEASUREMENTS: Final = frozenset({"temperature", "humidity", "wind"})
+REPORTED_MEASUREMENTS: Final = ("temperature", "humidity", "wind", "pressure")
+
 # BoM refreshes station observations every 10 minutes, town forecasts a few
 # times a day and warnings as they are issued.
 OBSERVATION_INTERVAL: Final = timedelta(minutes=10)
