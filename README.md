@@ -199,8 +199,7 @@ are redacted.
 ## Credits
 
 Inspired by [bremor/bureau_of_meteorology](https://github.com/bremor/bureau_of_meteorology),
-whose open issues and pull requests shaped this rewrite (see
-[docs/upstream-issues.md](docs/upstream-issues.md)).
+whose open issues and pull requests shaped this rewrite.
 
 Data © Commonwealth of Australia, Bureau of Meteorology. This project is not
 affiliated with or endorsed by the Bureau of Meteorology.
