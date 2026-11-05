@@ -1,0 +1,9 @@
+name: CodeQL config
+
+# The dashboard card bundle is generated from frontend/src by Vite and includes
+# minified third-party code (Lit). CodeQL scans the TypeScript source instead,
+# so findings point at code we write; the bundle is checked by the frontend
+# tests and rebuilt in CI ("Dashboard cards").
+paths-ignore:
+  - custom_components/bom_australia/frontend/**
+  - frontend/node_modules/**
