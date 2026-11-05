@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 from datetime import UTC, date, timedelta
 import itertools
 import json
@@ -688,3 +689,36 @@ async def test_wait_for_attempt_gives_up(
     with patch("custom_components.bom_australia.coordinator.ATTEMPT_WAIT", 0):
         await coordinator.async_wait_for_attempt()
     assert not coordinator._attempt_done.is_set()
+
+
+async def test_cancelled_fetch_releases_waiters(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    open_meteo: AiohttpClientMocker,
+) -> None:
+    """A cancelled or superseded fetch never leaves a request waiting."""
+    await setup_integration(hass, open_meteo_entry)
+    coordinator = open_meteo_entry.runtime_data.hourly
+    never = asyncio.Event()
+
+    async def hang(*_: Any) -> Any:
+        await never.wait()
+
+    mock_client.get_hourly_forecast.side_effect = hang
+    poll = hass.async_create_task(coordinator.async_refresh())
+    await asyncio.sleep(0)
+    waiter = hass.async_create_task(coordinator.async_wait_for_attempt())
+    await asyncio.sleep(0)
+    assert not waiter.done()
+    poll.cancel()
+    with contextlib.suppress(asyncio.CancelledError):
+        await poll
+    await asyncio.sleep(0)
+    assert waiter.done()
+
+    # Starting a new attempt releases anyone still waiting on an older one.
+    stranded = asyncio.Event()
+    coordinator._attempt_done = stranded
+    coordinator._note_attempt()
+    assert stranded.is_set()

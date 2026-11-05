@@ -132,7 +132,28 @@ class AttemptTrackingCoordinator[DataT](TimestampDataUpdateCoordinator[DataT]):
     def _note_attempt(self) -> None:
         self.last_attempt_time = dt_util.utcnow()
         self.retry_until = None
+        # Never leave anyone waiting on an earlier attempt's event.
+        self._signal_attempt_done()
         self._attempt_done = asyncio.Event()
+
+    def _signal_attempt_done(self) -> None:
+        if self._attempt_done is not None:
+            self._attempt_done.set()
+
+    async def _async_attempt_update(self) -> DataT:
+        """Fetch the data; called by _async_update_data."""
+        raise NotImplementedError
+
+    @override
+    async def _async_update_data(self) -> DataT:
+        self._note_attempt()
+        try:
+            return await self._async_attempt_update()
+        except asyncio.CancelledError:
+            # Home Assistant does not call _async_refresh_finished for a
+            # cancelled update: release waiters here.
+            self._signal_attempt_done()
+            raise
 
     def _note_retry_after(self, retry_after: float | None) -> None:
         if retry_after:
@@ -143,8 +164,7 @@ class AttemptTrackingCoordinator[DataT](TimestampDataUpdateCoordinator[DataT]):
     def _async_refresh_finished(self) -> None:
         # Called once the result (data or failure) has been stored.
         super()._async_refresh_finished()
-        if self._attempt_done is not None:
-            self._attempt_done.set()
+        self._signal_attempt_done()
 
     async def async_wait_for_attempt(self) -> None:
         """Wait for an update that is already running to finish."""
@@ -194,8 +214,7 @@ class BomCoordinator[DataT](AttemptTrackingCoordinator[DataT]):
         raise NotImplementedError
 
     @override
-    async def _async_update_data(self) -> DataT:
-        self._note_attempt()
+    async def _async_attempt_update(self) -> DataT:
         try:
             return await self._fetch()
         except BomRateLimitError as err:
@@ -473,8 +492,7 @@ class OpenMeteoCoordinator(AttemptTrackingCoordinator[OpenMeteoForecast]):
         self.client = OpenMeteo(session=async_get_clientsession(hass))
 
     @override
-    async def _async_update_data(self) -> OpenMeteoForecast:
-        self._note_attempt()
+    async def _async_attempt_update(self) -> OpenMeteoForecast:
         coordinate = self.location.coordinate
         try:
             forecast = await self.client.forecast(
