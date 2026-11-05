@@ -1,0 +1,333 @@
+"""Tests for the optional Open-Meteo secondary forecast."""
+
+from __future__ import annotations
+
+from datetime import date
+import json
+from typing import Any
+from unittest.mock import MagicMock, patch
+
+from bom_weather_api import BomConnectionError
+import pytest
+from pytest_homeassistant.common import MockConfigEntry
+from pytest_homeassistant.test_util.aiohttp import AiohttpClientMocker
+from syrupy.assertion import SnapshotAssertion
+
+from custom_components.bom_australia.const import (
+    ATTRIBUTION,
+    ATTRIBUTION_OPEN_METEO,
+    CONF_FORECAST_DAYS,
+    CONF_OPEN_METEO,
+    DOMAIN,
+    OPEN_METEO_FORECAST_DAYS,
+    OPEN_METEO_MODEL,
+)
+from custom_components.bom_australia.weather import map_wmo_condition
+from homeassistant.components.weather import (
+    ATTR_CONDITION_CLEAR_NIGHT,
+    ATTR_CONDITION_LIGHTNING_RAINY,
+    ATTR_CONDITION_POURING,
+    ATTR_CONDITION_SUNNY,
+    DOMAIN as WEATHER_DOMAIN,
+    SERVICE_GET_FORECASTS,
+)
+from homeassistant.config_entries import ConfigEntryState
+from homeassistant.const import ATTR_ATTRIBUTION, Platform
+from homeassistant.core import HomeAssistant
+
+from .conftest import ENTRY_DATA, fixture_bytes, setup_integration
+
+OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
+JSON = {"Content-Type": "application/json"}
+
+
+@pytest.fixture(autouse=True)
+def weather_only() -> None:
+    """Only set up the weather platform."""
+    with patch("custom_components.bom_australia.PLATFORMS", [Platform.WEATHER]):
+        yield
+
+
+@pytest.fixture
+def open_meteo_entry() -> MockConfigEntry:
+    """Return a config entry with Open-Meteo enabled."""
+    return MockConfigEntry(
+        domain=DOMAIN,
+        entry_id="01JBOMTESTENTRY0000000000",
+        title="Brisbane",
+        unique_id="QLD_PT001",
+        data=ENTRY_DATA,
+        options={CONF_FORECAST_DAYS: 2, CONF_OPEN_METEO: True},
+    )
+
+
+@pytest.fixture
+def open_meteo(aioclient_mock: AiohttpClientMocker) -> AiohttpClientMocker:
+    """Serve the captured Open-Meteo forecast."""
+    aioclient_mock.get(
+        OPEN_METEO_URL, text=fixture_bytes("open_meteo.json").decode(), headers=JSON
+    )
+    return aioclient_mock
+
+
+async def _forecast(hass: HomeAssistant, forecast_type: str) -> list[dict[str, Any]]:
+    response = await hass.services.async_call(
+        WEATHER_DOMAIN,
+        SERVICE_GET_FORECASTS,
+        {"entity_id": "weather.brisbane", "type": forecast_type},
+        blocking=True,
+        return_response=True,
+    )
+    return response["weather.brisbane"]["forecast"]
+
+
+async def test_disabled_by_default(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    mock_config_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
+) -> None:
+    """Without the option, Open-Meteo is never contacted."""
+    await setup_integration(hass, mock_config_entry)
+    assert aioclient_mock.call_count == 0
+    assert mock_config_entry.runtime_data.open_meteo is None
+    state = hass.states.get("weather.brisbane")
+    assert state.attributes[ATTR_ATTRIBUTION] == ATTRIBUTION
+    assert len(await _forecast(hass, "daily")) == 7
+
+
+async def test_request(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    open_meteo: AiohttpClientMocker,
+) -> None:
+    """The pinned model is requested in the location's timezone."""
+    await setup_integration(hass, open_meteo_entry)
+    assert open_meteo.call_count == 1
+    url = open_meteo.mock_calls[0][1]
+    assert url.query["models"] == OPEN_METEO_MODEL
+    assert url.query["timezone"] == "Australia/Brisbane"
+    assert url.query["forecast_days"] == str(OPEN_METEO_FORECAST_DAYS)
+    assert url.query["latitude"] == str(ENTRY_DATA["latitude"])
+    state = hass.states.get("weather.brisbane")
+    assert state.attributes[ATTR_ATTRIBUTION] == ATTRIBUTION_OPEN_METEO
+
+
+async def test_daily_forecast_extended(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    open_meteo: AiohttpClientMocker,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """BoM's seven days come first; Open-Meteo adds the days after them."""
+    await setup_integration(hass, open_meteo_entry)
+    forecast = await _forecast(hass, "daily")
+
+    bom_days = mock_client.get_daily_forecast.return_value.days
+    for day, bom in zip(forecast, bom_days, strict=False):
+        assert day["datetime"].startswith(bom.date.isoformat())
+        assert day["temperature"] == bom.temp_max
+    dates = [date.fromisoformat(day["datetime"][:10]) for day in forecast]
+    assert dates == sorted(dates)
+    assert len(dates) == len(set(dates))
+    assert dates[len(bom_days)] > bom_days[-1].date
+    assert dates[-1] == date(2026, 11, 11)
+    assert forecast[len(bom_days) :] == snapshot
+
+
+async def test_hourly_prefers_bom(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    open_meteo: AiohttpClientMocker,
+) -> None:
+    """BoM's hourly forecast is used while it is available."""
+    await setup_integration(hass, open_meteo_entry)
+    hourly = await _forecast(hass, "hourly")
+    bom = mock_client.get_hourly_forecast.return_value.hours
+    assert hourly[0]["datetime"] in {hour.time.isoformat() for hour in bom}
+
+
+async def test_hourly_falls_back_to_open_meteo(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    open_meteo: AiohttpClientMocker,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Open-Meteo provides the hourly forecast when the BoM app API fails."""
+    mock_client.get_hourly_forecast.side_effect = BomConnectionError("down")
+    await setup_integration(hass, open_meteo_entry)
+    assert open_meteo_entry.state is ConfigEntryState.LOADED
+    hourly = await _forecast(hass, "hourly")
+    # From the hour before "now" (2026-10-28 12:00 AEST) to the end of day 15.
+    assert hourly[0]["datetime"] == "2026-10-28T12:00:00+10:00"
+    assert hourly[-1]["datetime"] == "2026-11-11T23:00:00+10:00"
+    assert hourly[:3] == snapshot
+
+
+async def test_no_hourly_without_either_source(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
+) -> None:
+    """Without BoM or Open-Meteo hourly data there is no hourly forecast."""
+    mock_client.get_hourly_forecast.side_effect = BomConnectionError("down")
+    aioclient_mock.get(OPEN_METEO_URL, status=500, text="server error")
+    await setup_integration(hass, open_meteo_entry)
+    assert open_meteo_entry.state is ConfigEntryState.LOADED
+    assert await _forecast(hass, "hourly") == []
+    # The daily forecast keeps BoM's seven days.
+    assert len(await _forecast(hass, "daily")) == 7
+
+
+@pytest.mark.parametrize(
+    ("status", "headers", "message", "retry_after"),
+    [
+        (500, {}, "Error fetching the Open-Meteo forecast", None),
+        (429, {"Retry-After": "120"}, "rate limit", 120),
+    ],
+)
+@pytest.mark.usefixtures("mock_client")
+async def test_open_meteo_errors(
+    hass: HomeAssistant,
+    open_meteo_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
+    *,
+    status: int,
+    headers: dict[str, str],
+    message: str,
+    retry_after: int | None,
+) -> None:
+    """Open-Meteo failures leave the integration and BoM data working."""
+    aioclient_mock.get(
+        OPEN_METEO_URL,
+        status=status,
+        headers={**JSON, **headers},
+        text=json.dumps({"error": True, "reason": "nope"}),
+    )
+    await setup_integration(hass, open_meteo_entry)
+    assert open_meteo_entry.state is ConfigEntryState.LOADED
+    coordinator = open_meteo_entry.runtime_data.open_meteo
+    assert coordinator is not None
+    assert not coordinator.last_update_success
+    assert message.lower() in str(coordinator.last_exception).lower()
+    assert getattr(coordinator.last_exception, "retry_after", None) == retry_after
+    assert hass.states.get("weather.brisbane").state == "rainy"
+
+
+async def test_unknown_timezone(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    open_meteo: AiohttpClientMocker,
+) -> None:
+    """A timezone Home Assistant does not know is reported as a failure."""
+    with patch(
+        "custom_components.bom_australia.coordinator.dt_util.async_get_time_zone",
+        return_value=None,
+    ):
+        await setup_integration(hass, open_meteo_entry)
+    coordinator = open_meteo_entry.runtime_data.open_meteo
+    assert not coordinator.last_update_success
+    assert "unknown timezone" in str(coordinator.last_exception)
+
+
+async def test_missing_series(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
+) -> None:
+    """Responses without hourly data or with short series are tolerated."""
+    data = json.loads(fixture_bytes("open_meteo.json"))
+    del data["hourly"], data["hourly_units"]
+    data["daily"]["uv_index_max"] = data["daily"]["uv_index_max"][:2]
+    aioclient_mock.get(OPEN_METEO_URL, text=json.dumps(data), headers=JSON)
+    mock_client.get_hourly_forecast.side_effect = BomConnectionError("down")
+    await setup_integration(hass, open_meteo_entry)
+    assert await _forecast(hass, "hourly") == []
+    daily = await _forecast(hass, "daily")
+    assert daily[-1]["uv_index"] is None
+
+
+async def test_missing_daily(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
+) -> None:
+    """Without daily data, the daily forecast keeps BoM's seven days."""
+    data = json.loads(fixture_bytes("open_meteo.json"))
+    del data["daily"], data["daily_units"]
+    aioclient_mock.get(OPEN_METEO_URL, text=json.dumps(data), headers=JSON)
+    await setup_integration(hass, open_meteo_entry)
+    assert open_meteo_entry.runtime_data.open_meteo.data.days == []
+    assert len(await _forecast(hass, "daily")) == 7
+
+
+async def test_updates_pushed_to_subscribers(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    open_meteo: AiohttpClientMocker,
+) -> None:
+    """New Open-Meteo or BoM hourly data is sent to forecast subscribers."""
+    await setup_integration(hass, open_meteo_entry)
+    entity = hass.data["entity_components"][WEATHER_DOMAIN].get_entity(
+        "weather.brisbane"
+    )
+    received: dict[str, list[Any]] = {"daily": [], "hourly": []}
+    for forecast_type, updates in received.items():
+        entity.async_subscribe_forecast(forecast_type, updates.append)
+
+    runtime = open_meteo_entry.runtime_data
+    await runtime.open_meteo.async_refresh()
+    await hass.async_block_till_done()
+    assert len(received["daily"]) == 1
+    assert len(received["daily"][0]) == 15
+    assert len(received["hourly"]) == 1
+
+    await runtime.hourly.async_refresh()
+    await hass.async_block_till_done()
+    assert len(received["daily"]) == 1
+    assert len(received["hourly"]) == 2
+
+
+async def test_diagnostics_include_open_meteo(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    open_meteo: AiohttpClientMocker,
+) -> None:
+    """Diagnostics show the Open-Meteo coordinator and a sample of its data."""
+    from custom_components.bom_australia.diagnostics import (
+        async_get_config_entry_diagnostics,
+    )
+
+    await setup_integration(hass, open_meteo_entry)
+    diagnostics = await async_get_config_entry_diagnostics(hass, open_meteo_entry)
+    assert diagnostics["coordinators"]["open_meteo"]["last_update_success"]
+    assert diagnostics["open_meteo"]["model"] == OPEN_METEO_MODEL
+    assert len(diagnostics["open_meteo"]["days"]) == 3
+
+
+@pytest.mark.parametrize(
+    ("code", "is_night", "expected"),
+    [
+        (0, False, ATTR_CONDITION_SUNNY),
+        (1, True, ATTR_CONDITION_CLEAR_NIGHT),
+        (0, None, ATTR_CONDITION_SUNNY),
+        (65, False, ATTR_CONDITION_POURING),
+        (95, True, ATTR_CONDITION_LIGHTNING_RAINY),
+        (42, False, None),
+        (None, False, None),
+    ],
+)
+def test_map_wmo_condition(
+    code: int | None, is_night: bool | None, expected: str | None
+) -> None:
+    assert map_wmo_condition(code, is_night=is_night) == expected

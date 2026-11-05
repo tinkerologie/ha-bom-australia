@@ -317,6 +317,7 @@
       'wind_gust_max_at': HAFakeDatetime(2026, 10, 28, 0, 0, tzinfo=datetime.timezone.utc),
       'wind_speed': 6.0,
     }),
+    'open_meteo': None,
     'warnings': list([
       dict({
         'expires_at': HAFakeDatetime(2026, 10, 30, 7, 29, 27, tzinfo=datetime.timezone.utc),

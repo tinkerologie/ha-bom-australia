@@ -18,8 +18,8 @@ cd "$SCRIPT_DIR/.."
 source "$SCRIPT_DIR/.lib/output.sh"
 
 # Validator, dependency inputs and Dockerfile inspected; full plugins validated.
-# https://github.com/home-assistant/core/commit/01c488a2c71b00a68a1f61b72023ea03c6ed0699
-HASSFEST_CORE_REF="01c488a2c71b00a68a1f61b72023ea03c6ed0699"
+# https://github.com/home-assistant/core/commit/74cf5a49c63ed8d4d87717844bf14f79c28c9cea (2026.11.0)
+HASSFEST_CORE_REF="74cf5a49c63ed8d4d87717844bf14f79c28c9cea"
 HASSFEST_PYTHON_VERSION="3.14.2"
 HA_CORE_DIR=".local/ha-core"
 HA_CORE_REPO="https://github.com/home-assistant/core.git"

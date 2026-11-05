@@ -56,12 +56,14 @@
   "options": {
     "step": {
       "init": {
-        "title": "Forecast sensors",
+        "title": "Options",
         "data": {
-          "forecast_days": "Forecast days"
+          "forecast_days": "Forecast days",
+          "open_meteo": "Extend forecasts with Open-Meteo"
         },
         "data_description": {
-          "forecast_days": "Number of days to create daily forecast sensors for: 0 creates none, 1 is today and 2 adds tomorrow. The weather entity always includes the full 7-day forecast."
+          "forecast_days": "Number of days to create daily forecast sensors for: 0 creates none, 1 is today and 2 adds tomorrow. The weather entity always includes the full 7-day forecast.",
+          "open_meteo": "Adds days 8 to 15 to the weather entity's daily forecast and uses Open-Meteo's hourly forecast when BoM's is unavailable. Open-Meteo data is raw ECMWF model output without forecaster input, so BoM's forecast is used wherever it exists. Free for non-commercial use; data by Open-Meteo.com (CC BY 4.0)."
         }
       }
     }
@@ -200,6 +202,9 @@
     },
     "rate_limited": {
       "message": "The Bureau of Meteorology is rate limiting requests. Retrying later."
+    },
+    "open_meteo_failed": {
+      "message": "Error fetching the Open-Meteo forecast: {error}"
     }
   },
   "issues": {

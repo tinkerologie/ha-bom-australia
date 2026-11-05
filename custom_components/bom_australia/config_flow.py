@@ -24,6 +24,7 @@ from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
 from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import (
+    BooleanSelector,
     LocationSelector,
     LocationSelectorConfig,
     NumberSelector,
@@ -41,6 +42,7 @@ from .const import (
     CONF_LOCATION_AAC,
     CONF_LOCATION_NAME,
     CONF_LOCATION_STATE,
+    CONF_OPEN_METEO,
     CONF_STATION_ID,
     CONF_STATION_NAME,
     CONF_TIMEZONE,
@@ -306,7 +308,10 @@ class BomOptionsFlow(OptionsFlowWithReload):
         """Manage the options."""
         if user_input is not None:
             return self.async_create_entry(
-                data={CONF_FORECAST_DAYS: int(user_input[CONF_FORECAST_DAYS])}
+                data={
+                    CONF_FORECAST_DAYS: int(user_input[CONF_FORECAST_DAYS]),
+                    CONF_OPEN_METEO: bool(user_input.get(CONF_OPEN_METEO, False)),
+                }
             )
         return self.async_show_form(
             step_id="init",
@@ -324,7 +329,11 @@ class BomOptionsFlow(OptionsFlowWithReload):
                             step=1,
                             mode=NumberSelectorMode.SLIDER,
                         )
-                    )
+                    ),
+                    vol.Required(
+                        CONF_OPEN_METEO,
+                        default=self.config_entry.options.get(CONF_OPEN_METEO, False),
+                    ): BooleanSelector(),
                 }
             ),
         )

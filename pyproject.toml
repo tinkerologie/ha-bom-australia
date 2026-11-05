@@ -10,6 +10,10 @@ requires-python = ">=3.14.2"
 test = [
     # Must match the requirement in custom_components/bom_australia/manifest.json.
     "bom-weather-api==0.2.0",
+    # manifest.json requires open-meteo>=1.0.1: Home Assistant depends on it (its
+    # open_meteo integration), so hassfest requires a minimum version there. The
+    # tests pin the version Home Assistant ships.
+    "open-meteo==1.0.1",
     "pytest-cov==7.1.0",
     # Home Assistant's official test plugin. Each release pins the matching
     # homeassistant (and pytest, syrupy, freezegun), so this pin chooses the Home

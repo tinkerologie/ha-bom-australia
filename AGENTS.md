@@ -6,16 +6,17 @@ Meteorology data. Targets Home Assistant 2026.9+ and Python 3.14.
 ## Layout
 
 - `custom_components/bom_australia/`: the integration
-  - `coordinator.py`: four `TimestampDataUpdateCoordinator`s (observation, daily, hourly, warnings), runtime data, the `BomConfigEntry` alias
-  - `config_flow.py`: user → town → station flow, reconfigure (station), `OptionsFlowWithReload` (forecast days)
+  - `coordinator.py`: four BoM `TimestampDataUpdateCoordinator`s (observation, daily, hourly, warnings), the optional `OpenMeteoCoordinator`, runtime data, the `BomConfigEntry` alias
+  - `config_flow.py`: user → town → station flow, reconfigure (station), `OptionsFlowWithReload` (forecast days, Open-Meteo)
   - `weather.py`, `sensor.py`, `entity.py`, `diagnostics.py`
   - `translations/en.json`: the only strings file (custom integrations cannot use `[%key:…]` references)
 - `tests/`: tests on Home Assistant's official test plugin, [`pytest-homeassistant`](https://pypi.org/project/pytest-homeassistant/) (its pin in `pyproject.toml` chooses the Home Assistant version the tests run on), with syrupy snapshots in `tests/snapshots/`. Fixtures are real BoM responses captured on 2026-10-28.
-- The client library is [`bom-weather-api`](https://pypi.org/project/bom-weather-api/) (`tinkerologie/bom-weather-api`). Keep the pin in `manifest.json` and the `test` dependency group in `pyproject.toml` identical. To test against a local checkout: `BOM_API_PATH=../bom-api script/test`.
+- The client library is [`bom-weather-api`](https://pypi.org/project/bom-weather-api/) (`tinkerologie/bom-weather-api`). Keep the `bom-weather-api` pin in `manifest.json` and the `test` dependency group in `pyproject.toml` identical. `open-meteo` is a Home Assistant dependency, so `manifest.json` has a minimum (`>=`, hassfest requires it) and the test group pins the version Home Assistant ships. To test against a local checkout: `BOM_API_PATH=../bom-api script/test`.
 
 ## Rules
 
-- **Never do I/O in the integration.** All BoM access goes through `bom_weather_api.BomClient`. ruff bans `aiohttp` and `aioftp` imports here. Missing data or endpoints are changes to the library.
+- **Never do I/O in the integration.** All BoM access goes through `bom_weather_api.BomClient`; the optional Open-Meteo source goes through `open_meteo.OpenMeteo` (the library Home Assistant's own `open_meteo` integration uses). ruff bans `aiohttp` and `aioftp` imports here. Missing data or endpoints are changes to the library.
+- BoM is the primary source. Open-Meteo (`OpenMeteoCoordinator`, off by default) only extends the daily forecast past BoM's last day and replaces the hourly forecast while BoM's hourly coordinator has failed. Never let it override BoM data or fail setup.
 - Do not access `api.bom.gov.au` (the bom.gov.au website API). It blocks automated clients, and the project does not impersonate browsers.
 - `import probatio as vol` (HA 2026.9+). No `hass.data[DOMAIN]`; use `entry.runtime_data`.
 - Pass `step_id` to every `async_show_form`. Do not combine an update listener with `OptionsFlowWithReload` or `async_update_reload_and_abort`.

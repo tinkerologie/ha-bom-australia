@@ -9,7 +9,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .const import DOMAIN
+from .const import CONF_OPEN_METEO, DOMAIN
 from .coordinator import (
     BomConfigEntry,
     BomDailyForecastCoordinator,
@@ -17,6 +17,7 @@ from .coordinator import (
     BomObservationCoordinator,
     BomRuntimeData,
     BomWarningsCoordinator,
+    OpenMeteoCoordinator,
     location_from_entry,
 )
 from .frontend import async_register_frontend, async_unregister_frontend
@@ -38,6 +39,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: BomConfigEntry) -> bool:
         daily=BomDailyForecastCoordinator(hass, entry, client, location),
         hourly=BomHourlyForecastCoordinator(hass, entry, client, location),
         warnings=BomWarningsCoordinator(hass, entry, client, location),
+        open_meteo=OpenMeteoCoordinator(hass, entry, location)
+        if entry.options.get(CONF_OPEN_METEO, False)
+        else None,
     )
 
     # Observations and the daily forecast come from the official FTP products
@@ -47,6 +51,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: BomConfigEntry) -> bool:
     await runtime.daily.async_config_entry_first_refresh()
     await runtime.hourly.async_refresh()
     await runtime.warnings.async_refresh()
+    # The optional Open-Meteo forecast only extends and backs up BoM data.
+    if runtime.open_meteo is not None:
+        await runtime.open_meteo.async_refresh()
 
     entry.runtime_data = runtime
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)

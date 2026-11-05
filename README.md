@@ -95,8 +95,40 @@ Add the integration again to set up more towns.
 | Option | Description | Default |
 |---|---|---|
 | Forecast days | Number of days to create daily forecast sensors for. 0 creates none, 1 is today only. The weather entity always has the full forecast. | 2 |
+| Extend forecasts with Open-Meteo | Adds days 8 to 15 to the weather entity's daily forecast and uses Open-Meteo's hourly forecast when BoM's is unavailable. See [Open-Meteo](#open-meteo-optional). | Off |
 
 Reducing the number of days removes the sensors for the days you no longer use.
+
+### Open-Meteo (optional)
+
+[Open-Meteo](https://open-meteo.com/) is an optional second source, off by
+default. When you turn it on, the integration requests the
+[ECMWF IFS](https://open-meteo.com/en/docs/ecmwf-api) model (9 km, the most
+accurate free global model for Australia) once an hour and uses it to:
+
+- **extend the daily forecast** on the weather entity from BoM's 7 days to 15
+  days. BoM's days always come first; Open-Meteo only adds the days after them;
+- **fill the hourly forecast** when the BoM app API is unavailable. While BoM's
+  hourly forecast works, it is always used.
+
+Sensors and warnings stay BoM-only. The forecast card shows up to 15 days when
+you set its `days` option.
+
+Keep in mind:
+
+- Open-Meteo's data is **raw model output**. BoM's forecasts blend several
+  models, correct their known biases and are checked by meteorologists, so for
+  the first few days BoM is more accurate, especially for sea breezes, terrain,
+  storm timing and rain chance. That is why BoM's data is always preferred.
+- Rain chance comes from ECMWF's ensemble and the rain amount from a single
+  model run, so the two can disagree. Days and hours have no BoM forecast text
+  or rain ranges.
+- BoM's own ACCESS models are no longer published to Open-Meteo, so they are
+  not offered.
+- The free Open-Meteo API is for **non-commercial use** and has no uptime
+  guarantee. Data is licensed
+  [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); the weather
+  entity's attribution credits Open-Meteo.com when the option is on.
 
 ### Changing the observation station
 
@@ -110,10 +142,12 @@ Open the entry's menu under **Settings > Devices & services** and choose
 | Observations | 10 minutes (BoM updates stations every 10 minutes) |
 | Daily and hourly forecasts | 30 minutes (BoM issues town forecasts a few times a day) |
 | Warnings | 5 minutes; each warning's full text is fetched once per issue |
+| Open-Meteo (optional) | 60 minutes (ECMWF runs every 6 hours) |
 
 Each data set updates independently, so a problem with one source only makes
-its own entities unavailable. If BoM asks the integration to slow down, it
-waits for the time BoM requests.
+its own entities unavailable. If BoM or Open-Meteo asks the integration to slow
+down, it waits for the time requested. A failing Open-Meteo request never
+affects BoM data.
 
 ## Dashboard cards
 
@@ -126,7 +160,7 @@ weather entity and accept the suggested card.
 |---|---|---|
 | BoM weather | `custom:bom-australia-card` | All of the cards below in one card |
 | BoM now | `custom:bom-australia-now-card` | Current temperature and condition; today's summary and max/min; rain, UV, wind and humidity; fire danger and active warnings |
-| BoM forecast | `custom:bom-australia-forecast-card` | 7-day forecast with temperature range bars, rain chance and amount, and expandable BoM forecast text; hourly forecast |
+| BoM forecast | `custom:bom-australia-forecast-card` | 7-day (or with Open-Meteo, up to 15-day) forecast with temperature range bars, rain chance and amount, and expandable BoM forecast text; hourly forecast |
 | BoM warnings | `custom:bom-australia-warnings-card` | Current warnings with their full text |
 | BoM observations | `custom:bom-australia-observations-card` | Latest station readings |
 

@@ -12,6 +12,7 @@ from custom_components.bom_australia.const import (
     CONF_FORECAST_DAYS,
     CONF_LOCATION,
     CONF_LOCATION_AAC,
+    CONF_OPEN_METEO,
     CONF_STATION_ID,
     CONF_STATION_NAME,
     DOMAIN,
@@ -207,6 +208,6 @@ async def test_options_flow(
     )
     await hass.async_block_till_done()
     assert result["type"] is FlowResultType.CREATE_ENTRY
-    assert mock_config_entry.options == {CONF_FORECAST_DAYS: 1}
+    assert mock_config_entry.options == {CONF_FORECAST_DAYS: 1, CONF_OPEN_METEO: False}
     assert hass.states.get("sensor.brisbane_max_temperature_day_0")
     assert hass.states.get("sensor.brisbane_max_temperature_day_1") is None

@@ -8,6 +8,10 @@ project uses Home Assistant style versions (`YYYY.M.PATCH`).
 
 ### Added
 
+- Optional Open-Meteo forecast (ECMWF IFS), off by default: extends the weather
+  entity's daily forecast to 15 days and fills the hourly forecast when BoM's
+  is unavailable. BoM data is always preferred; the forecast card shows up to
+  15 days.
 - Releases ship `bom_australia.zip` with a `SHA256SUMS` file and a signed
   build provenance attestation. HACS and the Marketplace install the zip and
   show how often the latest release was downloaded
