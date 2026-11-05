@@ -83,62 +83,6 @@ var e=`https://github.com/tinkerologie/ha-bom-australia#dashboard-cards`,t=[`now
     font-size: var(--ha-font-size-s);
     line-height: var(--ha-line-height-normal);
   }
-  .list {
-    display: flex;
-    flex-direction: column;
-    margin: 0 calc(-1 * var(--ha-space-4));
-  }
-  .list-title {
-    margin: var(--ha-space-2) 0 0;
-    color: var(--secondary-text-color);
-    font-size: var(--ha-font-size-s);
-    font-weight: var(--ha-font-weight-medium);
-    letter-spacing: 0.02em;
-  }
-  .row {
-    display: flex;
-    align-items: center;
-    min-width: 0;
-  }
-  .row ha-md-list-item {
-    flex: 1;
-    min-width: 0;
-    --md-list-item-leading-space: var(--ha-space-4);
-    --md-list-item-trailing-space: var(--ha-space-4);
-    --md-list-item-top-space: var(--ha-space-2);
-    --md-list-item-bottom-space: var(--ha-space-2);
-    --md-list-item-label-text-size: var(--ha-font-size-m);
-    --md-list-item-supporting-text-size: var(--ha-font-size-s);
-    --md-list-item-trailing-supporting-text-size: var(--ha-font-size-s);
-    --ha-md-list-item-gap: var(--ha-space-3);
-  }
-  .row .link {
-    flex: none;
-    margin-inline-end: var(--ha-space-2);
-    color: var(--secondary-text-color);
-  }
-  .row .headline,
-  .row .supporting {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    white-space: normal;
-    overflow-wrap: anywhere;
-  }
-  .row .row-badge {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--ha-space-1);
-    margin: var(--ha-space-1) 0;
-  }
-  .row .trailing {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: var(--ha-space-1);
-    white-space: nowrap;
-  }
   .bubble {
     --tone: var(--grey-color);
     flex: none;
@@ -241,7 +185,7 @@ var e=`https://github.com/tinkerologie/ha-bom-australia#dashboard-cards`,t=[`now
       transition: none !important;
     }
   }
-`;function Ue(e,t,n){e.dispatchEvent(new CustomEvent(t,{detail:n,bubbles:!0,composed:!0}))}function We(e,t){t&&Ue(e,`hass-more-info`,{entityId:t})}var Ge=new WeakMap;function Ke(e){let t=e.entities,n=Ge.get(t);if(n)return n;let r=new Map,i=new Map;for(let t of Object.values(e.entities??{})){if(t.platform!==`bom_australia`||!t.device_id)continue;if(t.entity_id.startsWith(`weather.`)){i.set(t.device_id,t.entity_id);continue}if(!t.translation_key)continue;let e=r.get(t.device_id);e||r.set(t.device_id,e=new Map);let n=e.get(t.translation_key)??[];n.push(t.entity_id),e.set(t.translation_key,n)}let a=new Set([...r.keys(),...i.keys()]),o=Object.keys(e.devices??{}).filter(e=>a.has(e));for(let e of a)o.includes(e)||o.push(e);let s={devices:o,byKey:r,weather:i};return Ge.set(t,s),s}function L(e){return Ke(e).devices}function qe(e,t){return t||L(e)[0]}function Je(e,t){return!!t&&L(e).includes(t)}function Ye(e,t){if(!t)return;let n=e.devices?.[t];return n?.name_by_user||n?.name||void 0}function Xe(e,t){return t?Ke(e).weather.get(t):void 0}function R(e,t,n){return t?Ke(e).byKey.get(t)?.get(n)??[]:[]}function Ze(e,t,n){return R(e,t,n)[0]}function z(e,t,n){let r=Ze(e,t,n);return r?e.states[r]:void 0}function B(e,t,n){let r=new Map;for(let i of R(e,t,n)){let t=e.states[i],n=t?.attributes.date;t&&typeof n==`string`&&r.set(n,t)}return r}function V(e,t,n){let r=B(e,t,n),i=[...r.keys()].sort()[0];return i?r.get(i):void 0}var Qe=[`ha-card`,`ha-icon`,`ha-icon-button`,`ha-button`,`ha-alert`,`ha-assist-chip`,`ha-filter-chip`,`ha-chip-set`,`ha-md-list-item`,`ha-tooltip`],$e;function et(e=5e3){return $e??=(async()=>{try{await window.loadCardHelpers?.()}catch{}await Promise.race([Promise.all(Qe.map(e=>customElements.whenDefined(e))),new Promise(t=>setTimeout(t,e))])})(),$e}var tt={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6},nt=e=>(...t)=>({_$litDirective$:e,values:t}),rt=class{constructor(e){}get _$AU(){return this._$AM._$AU}_$AT(e,t,n){this._$Ct=e,this._$AM=t,this._$Ci=n}_$AS(e,t){return this.update(e,t)}update(e,t){return this.render(...t)}},it=`important`,at=` !`+it,ot=nt(class extends rt{constructor(e){if(super(e),e.type!==tt.ATTRIBUTE||e.name!==`style`||e.strings?.length>2)throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.")}render(e){return Object.keys(e).reduce((t,n)=>{let r=e[n];return r==null?t:t+`${n=n.includes(`-`)?n:n.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g,`-$&`).toLowerCase()}:${r};`},``)}update(e,[t]){let{style:n}=e.element;if(this.ft===void 0)return this.ft=new Set(Object.keys(t)),this.render(t);for(let e of this.ft)t[e]??(this.ft.delete(e),e.includes(`-`)?n.removeProperty(e):n[e]=null);for(let e in t){let r=t[e];if(r!=null){this.ft.add(e);let t=typeof r==`string`&&r.endsWith(at);e.includes(`-`)||t?n.setProperty(e,t?r.slice(0,-11):r,t?it:``):n[e]=r}}return A}});function st(e){return`var(--${e}-color)`}var ct=e=>ot({"--tone":st(e)});function lt(e,t,n=!1){return k`<span class="bubble ${n?`large`:``}" style=${ct(t)} aria-hidden="true">
+`;function Ue(e,t,n){e.dispatchEvent(new CustomEvent(t,{detail:n,bubbles:!0,composed:!0}))}function We(e,t){t&&Ue(e,`hass-more-info`,{entityId:t})}var Ge=new WeakMap;function Ke(e){let t=e.entities,n=Ge.get(t);if(n)return n;let r=new Map,i=new Map;for(let t of Object.values(e.entities??{})){if(t.platform!==`bom_australia`||!t.device_id)continue;if(t.entity_id.startsWith(`weather.`)){i.set(t.device_id,t.entity_id);continue}if(!t.translation_key)continue;let e=r.get(t.device_id);e||r.set(t.device_id,e=new Map);let n=e.get(t.translation_key)??[];n.push(t.entity_id),e.set(t.translation_key,n)}let a=new Set([...r.keys(),...i.keys()]),o=Object.keys(e.devices??{}).filter(e=>a.has(e));for(let e of a)o.includes(e)||o.push(e);let s={devices:o,byKey:r,weather:i};return Ge.set(t,s),s}function L(e){return Ke(e).devices}function qe(e,t){return t||L(e)[0]}function Je(e,t){return!!t&&L(e).includes(t)}function Ye(e,t){if(!t)return;let n=e.devices?.[t];return n?.name_by_user||n?.name||void 0}function Xe(e,t){return t?Ke(e).weather.get(t):void 0}function R(e,t,n){return t?Ke(e).byKey.get(t)?.get(n)??[]:[]}function Ze(e,t,n){return R(e,t,n)[0]}function z(e,t,n){let r=Ze(e,t,n);return r?e.states[r]:void 0}function B(e,t,n){let r=new Map;for(let i of R(e,t,n)){let t=e.states[i],n=t?.attributes.date;t&&typeof n==`string`&&r.set(n,t)}return r}function V(e,t,n){let r=B(e,t,n),i=[...r.keys()].sort()[0];return i?r.get(i):void 0}var Qe=[`ha-card`,`ha-icon`,`ha-icon-button`,`ha-button`,`ha-alert`,`ha-assist-chip`,`ha-filter-chip`,`ha-chip-set`,`ha-tooltip`],$e;function et(e=5e3){return $e??=(async()=>{try{await window.loadCardHelpers?.()}catch{}await Promise.race([Promise.all(Qe.map(e=>customElements.whenDefined(e))),new Promise(t=>setTimeout(t,e))])})(),$e}var tt={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6},nt=e=>(...t)=>({_$litDirective$:e,values:t}),rt=class{constructor(e){}get _$AU(){return this._$AM._$AU}_$AT(e,t,n){this._$Ct=e,this._$AM=t,this._$Ci=n}_$AS(e,t){return this.update(e,t)}update(e,t){return this.render(...t)}},it=`important`,at=` !`+it,ot=nt(class extends rt{constructor(e){if(super(e),e.type!==tt.ATTRIBUTE||e.name!==`style`||e.strings?.length>2)throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.")}render(e){return Object.keys(e).reduce((t,n)=>{let r=e[n];return r==null?t:t+`${n=n.includes(`-`)?n:n.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g,`-$&`).toLowerCase()}:${r};`},``)}update(e,[t]){let{style:n}=e.element;if(this.ft===void 0)return this.ft=new Set(Object.keys(t)),this.render(t);for(let e of this.ft)t[e]??(this.ft.delete(e),e.includes(`-`)?n.removeProperty(e):n[e]=null);for(let e in t){let r=t[e];if(r!=null){this.ft.add(e);let t=typeof r==`string`&&r.endsWith(at);e.includes(`-`)||t?n.setProperty(e,t?r.slice(0,-11):r,t?it:``):n[e]=r}}return A}});function st(e){return`var(--${e}-color)`}var ct=e=>ot({"--tone":st(e)});function lt(e,t,n=!1){return k`<span class="bubble ${n?`large`:``}" style=${ct(t)} aria-hidden="true">
     <ha-icon .icon=${e}></ha-icon>
   </span>`}function H(e,t,n){return k`<span class="badge" style=${ct(t)}>
     ${n?k`<ha-icon .icon=${n} aria-hidden="true"></ha-icon>`:j}<span>${e}</span>

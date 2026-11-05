@@ -50,11 +50,15 @@ API, which blocks automated clients.
 
 ## Installation
 
-### HACS
+### Marketplace (Home Assistant 2026.11 and later) or HACS
 
-1. In HACS, open the menu and choose **Custom repositories**.
-2. Add `https://github.com/tinkerologie/ha-bom-australia` with type **Integration**.
-3. Install **Bureau of Meteorology (Australia)** and restart Home Assistant.
+Home Assistant 2026.11 built HACS in as the **Marketplace**; on older versions
+use HACS.
+
+1. Add `https://github.com/tinkerologie/ha-bom-australia` as a custom repository
+   of type **Integration**. The Marketplace asks you to connect a GitHub account
+   before you can add custom repositories.
+2. Install **Bureau of Meteorology (Australia)** and restart Home Assistant.
 
 ### Manual
 
@@ -244,7 +248,8 @@ are redacted.
 
 1. Go to **Settings > Devices & services > Bureau of Meteorology (Australia)**.
 2. For each entry, open the menu and choose **Delete**.
-3. Remove the integration from HACS, or delete `custom_components/bom_australia`, and restart.
+3. Remove the integration from the Marketplace (or HACS), or delete
+   `custom_components/bom_australia`, and restart.
 
 ## Credits
 

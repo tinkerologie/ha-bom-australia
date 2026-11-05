@@ -275,12 +275,14 @@ class BomConfigFlow(ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             station = self._stations[user_input[CONF_STATION_ID]]
             if not (error := await self._validate_station(station)):
+                # Pass the reason so our translation is used, not the central one.
                 return self.async_update_reload_and_abort(
                     entry,
                     data_updates={
                         CONF_STATION_ID: station.id,
                         CONF_STATION_NAME: station.name,
                     },
+                    reason="reconfigure_successful",
                 )
             errors["base"] = error
 

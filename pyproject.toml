@@ -12,7 +12,8 @@ test = [
     "bom-weather-api==0.2.0",
     "freezegun==1.5.5",
     "pytest-cov==7.1.0",
-    # Pins homeassistant; keep it matched to the minimum version in hacs.json.
+    # Pins homeassistant; move to the release matching the newest Home Assistant
+    # once it exists. The minimum supported version is in hacs.json.
     "pytest-homeassistant-custom-component==0.13.375",
     "syrupy==6.1.1",
 ]

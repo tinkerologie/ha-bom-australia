@@ -83,8 +83,8 @@ rules:
   # Platinum
   async-dependency: done
   inject-websession:
-    status: todo
+    status: done
     comment: >-
-      The shared aiohttp session is injected for the BoM app API, but FTP
-      products are downloaded with aioftp, which opens its own connections.
+      Home Assistant's shared aiohttp session is injected for HTTP. FTP products
+      use aioftp, which is not HTTP and has no session to inject.
   strict-typing: todo
