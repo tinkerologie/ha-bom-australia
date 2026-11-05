@@ -6,10 +6,17 @@
     "http",
     "lovelace"
   ],
+  "categories": [
+    "weather_alerts.forecasts",
+    "weather_alerts.public_warnings"
+  ],
   "codeowners": [
     "@ruaan-deysel"
   ],
   "config_flow": true,
+  "connectivity": [
+    "cloud"
+  ],
   "dependencies": [],
   "documentation": "https://github.com/tinkerologie/ha-bom-australia",
   "integration_type": "service",

@@ -6,6 +6,18 @@ project uses Home Assistant style versions (`YYYY.M.PATCH`).
 
 ## [Unreleased]
 
+### Changed
+
+- Ready for Home Assistant 2026.11: removed the dashboard cards' use of
+  `ha-md-list-item` (removed in 2026.11), added the manifest `categories` and
+  `connectivity` keys, described every config flow field, and documented
+  installing from the Marketplace.
+
+### Fixed
+
+- Reconfiguring the observation station shows the integration's own success
+  message again instead of Home Assistant's generic one.
+
 ### Added
 
 - Releases ship `bom_australia.zip` with a `SHA256SUMS` file and a signed

@@ -16,6 +16,9 @@
         "description": "The Bureau of Meteorology issues town forecasts for these places, nearest first.",
         "data": {
           "location_aac": "Forecast town"
+        },
+        "data_description": {
+          "location_aac": "Bureau of Meteorology town forecasts are issued for these places. Choose the one nearest to you; its forecast is used for the weather entity and forecast sensors."
         }
       },
       "station": {
@@ -23,6 +26,9 @@
         "description": "Current conditions come from a Bureau of Meteorology weather station. These stations are nearest to {location}.",
         "data": {
           "station_id": "Observation station"
+        },
+        "data_description": {
+          "station_id": "The weather station whose readings provide current conditions. Stations that report temperature, humidity and wind are listed first; stations that report only some of them say what they do not report."
         }
       },
       "reconfigure": {
@@ -30,6 +36,9 @@
         "description": "Choose the weather station that provides current conditions for {location}.",
         "data": {
           "station_id": "Observation station"
+        },
+        "data_description": {
+          "station_id": "The weather station whose readings provide current conditions. Stations that report temperature, humidity and wind are listed first; stations that report only some of them say what they do not report."
         }
       }
     },
