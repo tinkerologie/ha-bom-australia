@@ -205,6 +205,12 @@
     },
     "open_meteo_failed": {
       "message": "Error fetching the Open-Meteo forecast: {error}"
+    },
+    "open_meteo_rate_limited": {
+      "message": "Open-Meteo is rate limiting requests. Retrying later."
+    },
+    "hourly_forecast_unavailable": {
+      "message": "Neither BoM nor Open-Meteo has a current hourly forecast."
     }
   },
   "issues": {

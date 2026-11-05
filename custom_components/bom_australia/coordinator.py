@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import asyncio
 from dataclasses import dataclass, replace
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 import logging
 from typing import TYPE_CHECKING, Any, override
 
@@ -31,6 +31,7 @@ from open_meteo import (
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
+from homeassistant.core import callback
 from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import (
@@ -89,6 +90,23 @@ class BomRuntimeData:
     hourly: BomHourlyForecastCoordinator
     warnings: BomWarningsCoordinator
     open_meteo: OpenMeteoCoordinator | None = None
+    hourly_source: HourlySourceCoordinator | None = None
+
+
+def is_fresh(coordinator: TimestampDataUpdateCoordinator[Any]) -> bool:
+    """Return whether a coordinator has recent, successful data.
+
+    Data stays usable for two update intervals, so a poll that is a little late
+    does not make it disappear.
+    """
+    last = coordinator.last_update_success_time
+    interval = coordinator.update_interval or timedelta(0)
+    return (
+        coordinator.last_update_success
+        and coordinator.data is not None
+        and last is not None
+        and dt_util.utcnow() - last < 2 * interval
+    )
 
 
 class BomCoordinator[DataT](TimestampDataUpdateCoordinator[DataT]):
@@ -413,7 +431,7 @@ class OpenMeteoCoordinator(TimestampDataUpdateCoordinator[OpenMeteoForecast]):
         except OpenMeteoRateLimitError as err:
             raise UpdateFailed(
                 translation_domain=DOMAIN,
-                translation_key="rate_limited",
+                translation_key="open_meteo_rate_limited",
                 retry_after=err.retry_after,
             ) from err
         except OpenMeteoError as err:
@@ -423,7 +441,11 @@ class OpenMeteoCoordinator(TimestampDataUpdateCoordinator[OpenMeteoForecast]):
                 translation_placeholders={"error": str(err)},
             ) from err
 
-        # Open-Meteo returns local wall-clock times without an offset.
+        # Open-Meteo returns times without an offset. They are UTC shifted by
+        # the response's utc_offset_seconds, one fixed offset for the whole
+        # response even across a daylight saving change, so they are read with
+        # that offset and then converted to the location's timezone.
+        offset = timezone(timedelta(seconds=forecast.utc_offset_seconds))
         tz = await dt_util.async_get_time_zone(forecast.timezone)
         if tz is None:
             raise UpdateFailed(
@@ -437,7 +459,7 @@ class OpenMeteoCoordinator(TimestampDataUpdateCoordinator[OpenMeteoForecast]):
         if (hourly := forecast.hourly) is not None:
             hours = [
                 OpenMeteoHour(
-                    time=time.replace(tzinfo=tz),
+                    time=time.replace(tzinfo=offset).astimezone(tz),
                     weather_code=_at(hourly.weather_code, i),
                     is_day=_at(hourly.is_day, i),
                     temperature=_at(hourly.temperature_2m, i),
@@ -476,6 +498,71 @@ class OpenMeteoCoordinator(TimestampDataUpdateCoordinator[OpenMeteoForecast]):
                 if _at(daily.temperature_2m_max, i) is not None
             ]
         return OpenMeteoForecast(model=OPEN_METEO_MODEL, hours=hours, days=days)
+
+
+@dataclass(frozen=True, slots=True)
+class HourlySource:
+    """The hourly forecast to show: BoM's, or Open-Meteo's when BoM has none."""
+
+    bom: HourlyForecast | None = None
+    open_meteo: list[OpenMeteoHour] | None = None
+
+
+class HourlySourceCoordinator(TimestampDataUpdateCoordinator[HourlySource]):
+    """Chooses the hourly forecast source when Open-Meteo is enabled.
+
+    The weather entity uses this as its hourly coordinator, so Home Assistant's
+    on-demand refresh and expiry checks apply to the fallback as well. It does
+    no I/O itself: an update refreshes whichever source is out of date and
+    picks BoM's forecast when it is fresh, otherwise Open-Meteo's. Updates of
+    either source are passed on straight away.
+    """
+
+    config_entry: BomConfigEntry
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        config_entry: BomConfigEntry,
+        bom: BomHourlyForecastCoordinator,
+        open_meteo: OpenMeteoCoordinator,
+    ) -> None:
+        """Initialise the coordinator."""
+        super().__init__(
+            hass,
+            _LOGGER,
+            config_entry=config_entry,
+            name=f"{DOMAIN} hourly_source {bom.location.name}",
+            update_interval=FORECAST_INTERVAL,
+        )
+        self.bom = bom
+        self.open_meteo = open_meteo
+
+    def _select(self) -> HourlySource:
+        if is_fresh(self.bom):
+            return HourlySource(bom=self.bom.data)
+        if is_fresh(self.open_meteo):
+            return HourlySource(open_meteo=self.open_meteo.data.hours)
+        raise UpdateFailed(
+            translation_domain=DOMAIN,
+            translation_key="hourly_forecast_unavailable",
+        )
+
+    @override
+    async def _async_update_data(self) -> HourlySource:
+        if not is_fresh(self.bom):
+            await self.bom.async_refresh()
+        if not is_fresh(self.bom) and not is_fresh(self.open_meteo):
+            await self.open_meteo.async_refresh()
+        return self._select()
+
+    @callback
+    def async_source_updated(self) -> None:
+        """Pass on an update of either source."""
+        try:
+            self.async_set_updated_data(self._select())
+        except UpdateFailed as err:
+            self.async_set_update_error(err)
 
 
 def diagnostics_data(

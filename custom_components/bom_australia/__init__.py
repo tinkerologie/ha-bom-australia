@@ -17,6 +17,7 @@ from .coordinator import (
     BomObservationCoordinator,
     BomRuntimeData,
     BomWarningsCoordinator,
+    HourlySourceCoordinator,
     OpenMeteoCoordinator,
     location_from_entry,
 )
@@ -54,6 +55,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: BomConfigEntry) -> bool:
     # The optional Open-Meteo forecast only extends and backs up BoM data.
     if runtime.open_meteo is not None:
         await runtime.open_meteo.async_refresh()
+        source = HourlySourceCoordinator(
+            hass, entry, runtime.hourly, runtime.open_meteo
+        )
+        for coordinator in (runtime.hourly, runtime.open_meteo):
+            entry.async_on_unload(
+                coordinator.async_add_listener(source.async_source_updated)
+            )
+        source.async_source_updated()
+        runtime.hourly_source = source
 
     entry.runtime_data = runtime
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)

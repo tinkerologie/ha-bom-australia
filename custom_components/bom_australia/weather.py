@@ -3,10 +3,14 @@
 from __future__ import annotations
 
 from datetime import datetime, time, timedelta
-from functools import partial
-from typing import TYPE_CHECKING, Literal, override
+from typing import TYPE_CHECKING, override
 
-from bom_weather_api import DailyForecastDay, HourlyForecastPoint, Observation
+from bom_weather_api import (
+    DailyForecastDay,
+    HourlyForecast,
+    HourlyForecastPoint,
+    Observation,
+)
 
 from homeassistant.components.weather import (
     ATTR_CONDITION_CLEAR_NIGHT,
@@ -37,10 +41,12 @@ from .coordinator import (
     BomDailyForecastCoordinator,
     BomHourlyForecastCoordinator,
     BomObservationCoordinator,
+    HourlySourceCoordinator,
     OpenMeteoCoordinator,
     OpenMeteoDay,
     OpenMeteoForecast,
     OpenMeteoHour,
+    is_fresh,
 )
 from .entity import device_info
 
@@ -121,7 +127,7 @@ class BomWeather(
     CoordinatorWeatherEntity[
         BomObservationCoordinator,
         BomDailyForecastCoordinator,
-        BomHourlyForecastCoordinator,
+        BomHourlyForecastCoordinator | HourlySourceCoordinator,
         BomDailyForecastCoordinator,
     ]
 ):
@@ -142,14 +148,13 @@ class BomWeather(
         """Initialise the weather entity."""
         runtime = entry.runtime_data
         self._open_meteo: OpenMeteoCoordinator | None = runtime.open_meteo
+        self._hourly_source: HourlySourceCoordinator | None = runtime.hourly_source
         super().__init__(
             runtime.observation,
             daily_coordinator=runtime.daily,
-            # With Open-Meteo enabled the hourly forecast falls back to it when
-            # the BoM app API fails. The base class returns no forecast at all
-            # when its hourly coordinator failed, so the hourly coordinators are
-            # then followed here instead (see async_added_to_hass).
-            hourly_coordinator=None if self._open_meteo else runtime.hourly,
+            # With Open-Meteo enabled, the hourly source coordinator falls back
+            # to Open-Meteo while BoM's hourly forecast is unavailable.
+            hourly_coordinator=self._hourly_source or runtime.hourly,
         )
         self._daily = runtime.daily
         self._hourly = runtime.hourly
@@ -161,29 +166,30 @@ class BomWeather(
     @override
     async def async_added_to_hass(self) -> None:
         await super().async_added_to_hass()
-        if self._open_meteo is None:
-            return
-        self.async_on_remove(
-            self._open_meteo.async_add_listener(
-                partial(self._push_forecasts, ("daily", "hourly"))
+        if self._open_meteo is not None:
+            # New Open-Meteo days extend the daily forecast.
+            self.async_on_remove(
+                self._open_meteo.async_add_listener(self._push_daily_forecast)
             )
-        )
-        self.async_on_remove(
-            self._hourly.async_add_listener(partial(self._push_forecasts, ("hourly",)))
-        )
 
     @callback
-    def _push_forecasts(
-        self, forecast_types: tuple[Literal["daily", "hourly"], ...]
-    ) -> None:
-        """Send updated forecasts to subscribers."""
+    def _push_daily_forecast(self) -> None:
+        """Send the extended daily forecast to subscribers."""
         self._daily.config_entry.async_create_task(
-            self.hass, self.async_update_listeners(forecast_types)
+            self.hass, self.async_update_listeners(("daily",))
         )
 
     @property
     def _open_meteo_data(self) -> OpenMeteoForecast | None:
-        if self._open_meteo is None or not self._open_meteo.last_update_success:
+        """Return current Open-Meteo data, requesting a refresh when stale."""
+        if self._open_meteo is None:
+            return None
+        if not is_fresh(self._open_meteo):
+            # Polling may be disabled: refresh in the background, and leave the
+            # extension out until fresh data arrives.
+            self._open_meteo.config_entry.async_create_task(
+                self.hass, self._open_meteo.async_request_refresh()
+            )
             return None
         return self._open_meteo.data
 
@@ -308,13 +314,19 @@ class BomWeather(
     @override
     def _async_forecast_hourly(self) -> list[Forecast] | None:
         start = dt_util.utcnow() - timedelta(hours=1)
-        if not self._hourly.last_update_success or not self._hourly.data:
-            # BoM's hourly forecast is unavailable: use Open-Meteo if enabled.
-            if (secondary := self._open_meteo_data) is None:
-                return None
-            return [
-                open_meteo_hourly(hour) for hour in secondary.hours if hour.time > start
-            ]
+        hourly: HourlyForecast | None = self._hourly.data
+        if self._hourly_source is not None:
+            # The base class only asks while the source has fresh data.
+            source = self._hourly_source.data
+            if source.open_meteo is not None:
+                return [
+                    open_meteo_hourly(hour)
+                    for hour in source.open_meteo
+                    if hour.time > start
+                ]
+            hourly = source.bom
+        if not hourly:
+            return None
         return [
             Forecast(
                 datetime=hour.time.isoformat(),
@@ -330,6 +342,6 @@ class BomWeather(
                 wind_bearing=hour.wind_bearing,
                 uv_index=hour.uv_index,
             )
-            for hour in self._hourly.data.hours
+            for hour in hourly.hours
             if hour.time > start
         ]

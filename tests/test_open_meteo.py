@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import UTC, date, timedelta
+import itertools
 import json
 from typing import Any
 from unittest.mock import MagicMock, patch
@@ -188,7 +189,7 @@ async def test_no_hourly_without_either_source(
     ("status", "headers", "message", "retry_after"),
     [
         (500, {}, "Error fetching the Open-Meteo forecast", None),
-        (429, {"Retry-After": "120"}, "rate limit", 120),
+        (429, {"Retry-After": "120"}, "Open-Meteo is rate limiting", 120),
     ],
 )
 @pytest.mark.usefixtures("mock_client")
@@ -275,7 +276,7 @@ async def test_updates_pushed_to_subscribers(
     open_meteo_entry: MockConfigEntry,
     open_meteo: AiohttpClientMocker,
 ) -> None:
-    """New Open-Meteo or BoM hourly data is sent to forecast subscribers."""
+    """New data from either source is sent to forecast subscribers."""
     await setup_integration(hass, open_meteo_entry)
     entity = hass.data["entity_components"][WEATHER_DOMAIN].get_entity(
         "weather.brisbane"
@@ -289,12 +290,116 @@ async def test_updates_pushed_to_subscribers(
     await hass.async_block_till_done()
     assert len(received["daily"]) == 1
     assert len(received["daily"][0]) == 15
-    assert len(received["hourly"]) == 1
+    hourly_updates = len(received["hourly"])
+    assert hourly_updates >= 1
 
+    # BoM's hourly forecast fails: subscribers switch to Open-Meteo's ...
+    mock_client.get_hourly_forecast.side_effect = BomConnectionError("down")
     await runtime.hourly.async_refresh()
     await hass.async_block_till_done()
-    assert len(received["daily"]) == 1
-    assert len(received["hourly"]) == 2
+    assert received["hourly"][-1][0]["datetime"].endswith("+10:00")
+    assert len(received["hourly"]) > hourly_updates
+
+    # ... and back to BoM's when it recovers.
+    mock_client.get_hourly_forecast.side_effect = None
+    await runtime.hourly.async_refresh()
+    await hass.async_block_till_done()
+    assert received["hourly"][-1][0]["datetime"].endswith("+00:00")
+
+
+async def test_stale_sources_refreshed_on_demand(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    open_meteo: AiohttpClientMocker,
+    freezer: Any,
+) -> None:
+    """With polling disabled, old data expires and is refreshed when asked for."""
+    mock_client.get_hourly_forecast.side_effect = BomConnectionError("down")
+    open_meteo_entry.add_to_hass(hass)
+    hass.config_entries.async_update_entry(open_meteo_entry, pref_disable_polling=True)
+    await setup_integration(hass, open_meteo_entry)
+    assert open_meteo.call_count == 1
+    assert len(await _forecast(hass, "hourly")) > 0
+
+    # Hours later, nothing has polled. Asking for the hourly forecast refreshes
+    # the stale sources instead of serving the old Open-Meteo data.
+    freezer.tick(timedelta(hours=3))
+    calls = mock_client.get_hourly_forecast.call_count
+    hourly = await _forecast(hass, "hourly")
+    assert mock_client.get_hourly_forecast.call_count > calls
+    assert open_meteo.call_count == 2
+    assert hourly
+
+    # Stale Open-Meteo days are left out of the daily forecast and refreshed in
+    # the background.
+    freezer.tick(timedelta(hours=3))
+    assert len(await _forecast(hass, "daily")) == 7
+    await hass.async_block_till_done()
+    assert open_meteo.call_count == 3
+    assert len(await _forecast(hass, "daily")) == 15
+
+
+async def test_no_source_fresh(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
+) -> None:
+    """The hourly source reports why there is no hourly forecast."""
+    mock_client.get_hourly_forecast.side_effect = BomConnectionError("down")
+    aioclient_mock.get(OPEN_METEO_URL, status=500, headers=JSON, text="{}")
+    await setup_integration(hass, open_meteo_entry)
+    source = open_meteo_entry.runtime_data.hourly_source
+    assert not source.last_update_success
+    assert "Neither BoM nor Open-Meteo" in str(source.last_exception)
+
+
+async def test_daylight_saving(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    aioclient_mock: AiohttpClientMocker,
+) -> None:
+    """Times keep their instants across a daylight saving change (Sydney)."""
+    times = [f"2026-10-04T{hour:02}:00" for hour in range(5)]
+    aioclient_mock.get(
+        OPEN_METEO_URL,
+        headers=JSON,
+        text=json.dumps(
+            {
+                "latitude": -33.86,
+                "longitude": 151.21,
+                "generationtime_ms": 0.1,
+                "utc_offset_seconds": 36000,
+                "timezone": "Australia/Sydney",
+                "timezone_abbreviation": "GMT+10",
+                "elevation": 10.0,
+                "hourly_units": {"time": "iso8601", "temperature_2m": "°C"},
+                "hourly": {"time": times, "temperature_2m": [10.0] * 5},
+            }
+        ),
+    )
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        title="Sydney",
+        unique_id="NSW_PT131",
+        data={**ENTRY_DATA, "timezone": "Australia/Sydney"},
+        options={CONF_OPEN_METEO: True},
+    )
+    await setup_integration(hass, entry)
+    coordinator = entry.runtime_data.open_meteo
+    assert coordinator.last_update_success, repr(coordinator.last_exception.__cause__)
+    hours = coordinator.data.hours
+    instants = [hour.time.astimezone(UTC) for hour in hours]
+    # One hour apart in real time, although clocks skip 02:00 to 03:00.
+    assert [b - a for a, b in itertools.pairwise(instants)] == [timedelta(hours=1)] * 4
+    assert [hour.time.isoformat() for hour in hours] == [
+        "2026-10-04T00:00:00+10:00",
+        "2026-10-04T01:00:00+10:00",
+        "2026-10-04T03:00:00+11:00",
+        "2026-10-04T04:00:00+11:00",
+        "2026-10-04T05:00:00+11:00",
+    ]
 
 
 async def test_diagnostics_include_open_meteo(
