@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from datetime import UTC, date, timedelta
 import itertools
 import json
@@ -191,6 +192,7 @@ async def test_no_hourly_without_either_source(
     [
         (500, {}, "Error fetching the Open-Meteo forecast", None),
         (429, {"Retry-After": "120"}, "Open-Meteo is rate limiting", 120),
+        (429, {}, "Open-Meteo is rate limiting", None),
     ],
 )
 @pytest.mark.usefixtures("mock_client")
@@ -449,6 +451,92 @@ async def test_hourly_source_listens_only_while_subscribed(
     unsubscribe()
     assert len(runtime.open_meteo._listeners) == om_listeners
     assert runtime.hourly_source._unsub_sources == []
+
+
+async def _polling_disabled(hass: HomeAssistant, entry: MockConfigEntry) -> None:
+    entry.add_to_hass(hass)
+    hass.config_entries.async_update_entry(entry, pref_disable_polling=True)
+    await setup_integration(hass, entry)
+
+
+async def test_concurrent_requests_fetch_once(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    open_meteo: AiohttpClientMocker,
+    freezer: Any,
+) -> None:
+    """Simultaneous requests refresh an expired source once, and both get it."""
+    mock_client.get_hourly_forecast.side_effect = BomConnectionError("down")
+    await _polling_disabled(hass, open_meteo_entry)
+    assert await _forecast(hass, "hourly")
+    calls = mock_client.get_hourly_forecast.call_count
+
+    # Both sources have expired: each request needs the refreshed data.
+    freezer.tick(timedelta(hours=3))
+    first, second = await asyncio.gather(
+        _forecast(hass, "hourly"), _forecast(hass, "hourly")
+    )
+    assert mock_client.get_hourly_forecast.call_count == calls + 1
+    assert open_meteo.call_count == 2
+    assert first
+    assert first == second
+
+
+async def test_hourly_requests_honour_retry_after(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
+    freezer: Any,
+) -> None:
+    """Asking for the hourly forecast does not retry Open-Meteo before Retry-After."""
+    mock_client.get_hourly_forecast.side_effect = BomConnectionError("down")
+    aioclient_mock.get(
+        OPEN_METEO_URL,
+        status=429,
+        headers={**JSON, "Retry-After": "7200"},
+        text=json.dumps({"error": True, "reason": "slow down"}),
+    )
+    await _polling_disabled(hass, open_meteo_entry)
+    assert aioclient_mock.call_count == 1
+
+    freezer.tick(timedelta(minutes=61))
+    assert await _forecast(hass, "hourly") == []
+    assert aioclient_mock.call_count == 1
+
+    freezer.tick(timedelta(minutes=60))
+    await _forecast(hass, "hourly")
+    assert aioclient_mock.call_count == 2
+
+
+async def test_daily_extension_recovers_without_polling(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
+    freezer: Any,
+) -> None:
+    """With polling disabled, a failed Open-Meteo is asked again once it is due."""
+    aioclient_mock.get(OPEN_METEO_URL, status=500, headers=JSON, text="{}")
+    await _polling_disabled(hass, open_meteo_entry)
+    aioclient_mock.clear_requests()
+    aioclient_mock.get(
+        OPEN_METEO_URL, text=fixture_bytes("open_meteo.json").decode(), headers=JSON
+    )
+
+    # Not due yet: no request.
+    assert len(await _forecast(hass, "daily")) == 7
+    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=11))
+    await hass.async_block_till_done()
+    assert aioclient_mock.call_count == 0
+
+    freezer.tick(timedelta(minutes=61))
+    assert len(await _forecast(hass, "daily")) == 7
+    async_fire_time_changed(hass, dt_util.utcnow() + timedelta(seconds=11))
+    await hass.async_block_till_done()
+    assert aioclient_mock.call_count == 1
+    assert len(await _forecast(hass, "daily")) == 15
 
 
 async def test_no_source_fresh(

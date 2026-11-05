@@ -34,6 +34,7 @@ from .const import (
     ATTRIBUTION_OPEN_METEO,
     CONDITION_MAP,
     CURRENT_HOUR_TOLERANCE,
+    OPEN_METEO_INTERVAL,
     WMO_CONDITION_MAP,
 )
 from .coordinator import (
@@ -46,6 +47,7 @@ from .coordinator import (
     OpenMeteoDay,
     OpenMeteoForecast,
     OpenMeteoHour,
+    is_due,
     is_fresh,
 )
 from .entity import device_info
@@ -185,10 +187,10 @@ class BomWeather(
         if self._open_meteo is None:
             return None
         if not is_fresh(self._open_meteo):
-            # Leave the extension out until fresh data arrives. Old data after a
-            # successful update means polling is off: ask for a refresh. After a
-            # failure the coordinator retries itself, honouring Retry-After.
-            if self._open_meteo.last_update_success:
+            # Leave the extension out until fresh data arrives, and ask for it
+            # when Open-Meteo is due: polling may be disabled. A failed source
+            # is not asked again within its interval or before Retry-After.
+            if is_due(self._open_meteo, OPEN_METEO_INTERVAL):
                 self._open_meteo.config_entry.async_create_task(
                     self.hass, self._open_meteo.async_request_refresh()
                 )

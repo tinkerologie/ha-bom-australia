@@ -111,14 +111,36 @@ def is_fresh(coordinator: TimestampDataUpdateCoordinator[Any]) -> bool:
     )
 
 
-def is_due(coordinator: TimestampDataUpdateCoordinator[Any]) -> bool:
-    """Return whether a coordinator should refresh: its data is an interval old."""
-    last = coordinator.last_update_success_time
-    interval = coordinator.update_interval or timedelta(0)
-    return last is None or dt_util.utcnow() - last >= interval
+class AttemptTracking:
+    """When a source last tried to update, and until when it must wait.
+
+    Home Assistant only records successful updates. A source that is refreshed
+    on demand also needs its last attempt, so a failing source is not asked
+    again before its interval, and an honoured Retry-After.
+    """
+
+    last_attempt_time: datetime | None = None
+    retry_until: datetime | None = None
+
+    def _note_attempt(self) -> None:
+        self.last_attempt_time = dt_util.utcnow()
+        self.retry_until = None
+
+    def _note_retry_after(self, retry_after: float | None) -> None:
+        if retry_after:
+            self.retry_until = dt_util.utcnow() + timedelta(seconds=retry_after)
 
 
-class BomCoordinator[DataT](TimestampDataUpdateCoordinator[DataT]):
+def is_due(coordinator: AttemptTracking, interval: timedelta) -> bool:
+    """Return whether a source may be refreshed on demand now."""
+    now = dt_util.utcnow()
+    if coordinator.retry_until is not None and now < coordinator.retry_until:
+        return False
+    last = coordinator.last_attempt_time
+    return last is None or now - last >= interval
+
+
+class BomCoordinator[DataT](AttemptTracking, TimestampDataUpdateCoordinator[DataT]):
     """Base coordinator that maps library errors to translated failures."""
 
     config_entry: BomConfigEntry
@@ -149,9 +171,11 @@ class BomCoordinator[DataT](TimestampDataUpdateCoordinator[DataT]):
 
     @override
     async def _async_update_data(self) -> DataT:
+        self._note_attempt()
         try:
             return await self._fetch()
         except BomRateLimitError as err:
+            self._note_retry_after(err.retry_after)
             raise UpdateFailed(
                 translation_domain=DOMAIN,
                 translation_key="rate_limited",
@@ -397,7 +421,9 @@ def _at[T](values: list[T | None] | None, index: int) -> T | None:
     return values[index]
 
 
-class OpenMeteoCoordinator(TimestampDataUpdateCoordinator[OpenMeteoForecast]):
+class OpenMeteoCoordinator(
+    AttemptTracking, TimestampDataUpdateCoordinator[OpenMeteoForecast]
+):
     """Optional secondary forecast from Open-Meteo (ECMWF IFS).
 
     Used to extend the daily forecast past BoM's seven days and to fill the
@@ -426,6 +452,7 @@ class OpenMeteoCoordinator(TimestampDataUpdateCoordinator[OpenMeteoForecast]):
 
     @override
     async def _async_update_data(self) -> OpenMeteoForecast:
+        self._note_attempt()
         coordinate = self.location.coordinate
         try:
             forecast = await self.client.forecast(
@@ -438,6 +465,7 @@ class OpenMeteoCoordinator(TimestampDataUpdateCoordinator[OpenMeteoForecast]):
                 forecast_days=OPEN_METEO_FORECAST_DAYS,
             )
         except OpenMeteoRateLimitError as err:
+            self._note_retry_after(err.retry_after)
             raise UpdateFailed(
                 translation_domain=DOMAIN,
                 translation_key="open_meteo_rate_limited",
@@ -548,6 +576,7 @@ class HourlySourceCoordinator(TimestampDataUpdateCoordinator[HourlySource]):
         self.bom = bom
         self.open_meteo = open_meteo
         self._unsub_sources: list[CALLBACK_TYPE] = []
+        self._refresh_sources_lock = asyncio.Lock()
 
     def current(self) -> HourlySource | None:
         """Return the hourly forecast to show now, judged on the sources' age.
@@ -562,10 +591,15 @@ class HourlySourceCoordinator(TimestampDataUpdateCoordinator[HourlySource]):
 
     @override
     async def _async_update_data(self) -> HourlySource:
-        if is_due(self.bom):
-            await self.bom.async_request_refresh()
-        if not is_fresh(self.bom) and is_due(self.open_meteo):
-            await self.open_meteo.async_request_refresh()
+        # One refresh at a time, and each source only when it is due: not while
+        # its own poll is running (that counts as an attempt), not again within
+        # its interval after a failure, and not before a Retry-After has passed.
+        # The refresh is awaited, so the choice below sees its result.
+        async with self._refresh_sources_lock:
+            if is_due(self.bom, FORECAST_INTERVAL):
+                await self.bom.async_refresh()
+            if not is_fresh(self.bom) and is_due(self.open_meteo, OPEN_METEO_INTERVAL):
+                await self.open_meteo.async_refresh()
         if (source := self.current()) is None:
             raise UpdateFailed(
                 translation_domain=DOMAIN,
