@@ -36,6 +36,37 @@ BOM_LIVE=1 script/test tests/test_live.py   # end-to-end against live BoM
 script/develop               # run HA on :8123 with this integration
 ```
 
+## Home Assistant deprecations
+
+Home Assistant logs deprecated use by integrations instead of raising, so CI checks
+for it explicitly:
+
+- **Current release (blocking):** pytest turns every warning into an error, and an
+  autouse fixture (`tests/fixtures/deprecations.py`, installed from
+  `tests/__init__.py`) fails a test when Home Assistant logs "Detected that custom
+  integration 'bom_australia' …", "The deprecated … was used from bom_australia" or
+  "custom_components.bom_australia.<module>::<Class> provides the deprecated …".
+- **Next release (early warning):** the weekly `HA Next` workflow tests the newest
+  `homeassistant` on PyPI (betas included) and Core `dev`: it imports every module
+  (`script/import_smoke.py`), runs the tests when a matching
+  `pytest-homeassistant-custom-component` exists, and runs Hassfest. Failures open
+  one issue per channel labelled `ha-next` and `bug`.
+- **Developer blog:** the weekly `HA Dev Blog` workflow (`script/ha_dev_blog.py`)
+  opens an issue labelled `ha-dev-blog` and `enhancement` for each post that
+  deprecates or removes code the integration uses.
+
+When one of these fires: read the linked run or post, replace the deprecated API
+with its successor, and keep the integration working on the minimum Home Assistant
+version in `hacs.json`.
+
+Run the checks locally:
+
+```bash
+script/test                                       # current release, blocking
+.venv/bin/python script/import_smoke.py           # import smoke on the installed HA
+HA_VERSION=2026.11.0 ./script/hassfest --skip-plugins ""   # Hassfest for a release
+```
+
 ## Releases
 
 Bump `version` in `manifest.json` (CalVer `YYYY.M.PATCH`) and add a matching

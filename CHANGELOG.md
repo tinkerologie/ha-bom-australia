@@ -12,6 +12,10 @@ project uses Home Assistant style versions (`YYYY.M.PATCH`).
   build provenance attestation. HACS and the Marketplace install the zip and
   show how often the latest release was downloaded
   ([#7](https://github.com/tinkerologie/ha-bom-australia/issues/7)).
+- CI catches Home Assistant deprecations: tests fail on deprecated use, and
+  weekly workflows test the next Home Assistant release and Core `dev` and watch
+  the developer blog
+  ([#8](https://github.com/tinkerologie/ha-bom-australia/issues/8)).
 
 ## [2026.10.0] - 2026-10-28
 
