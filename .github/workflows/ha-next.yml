@@ -74,9 +74,11 @@ jobs:
             echo "Home Assistant dev at $revision"
             {
               echo "ha_version=dev@${revision:0:12}"
-              echo "requirement=homeassistant @ https://github.com/home-assistant/core/archive/$revision.tar.gz"
+              echo "revision=$revision"
+              # Installed from a checkout with generated translations (next step);
               # Core ships the official test plugin in packages/pytest-homeassistant.
-              echo "harness_requirement=pytest-homeassistant @ https://github.com/home-assistant/core/archive/$revision.tar.gz#subdirectory=packages/pytest-homeassistant"
+              echo "requirement=homeassistant @ file://$RUNNER_TEMP/ha-core"
+              echo "harness_requirement=pytest-homeassistant @ file://$RUNNER_TEMP/ha-core/packages/pytest-homeassistant"
               echo "hassfest_ref=$revision"
             } >> "$GITHUB_OUTPUT"
             exit 0
@@ -111,6 +113,23 @@ jobs:
             echo "hassfest_ref=$ha_version"
           } >> "$GITHUB_OUTPUT"
 
+      # PyPI wheels include each integration's generated translations/; Core
+      # source has only strings.json. Without them, entity names that come from
+      # the device class (such as "Temperature") resolve to None.
+      - name: Check out Core dev and generate its translations
+        if: matrix.channel == 'dev'
+        env:
+          REVISION: ${{ steps.resolve.outputs.revision }}
+          REQUIREMENT: ${{ steps.resolve.outputs.requirement }}
+        run: |
+          core="$RUNNER_TEMP/ha-core"
+          git init -q "$core"
+          git -C "$core" fetch -q --depth 1 https://github.com/home-assistant/core.git "$REVISION"
+          git -C "$core" checkout -q --detach FETCH_HEAD
+          uv pip install "$REQUIREMENT"
+          (cd "$core" && python -m script.translations develop --all)
+          test -f "$core/homeassistant/components/sensor/translations/en.json"
+
       - name: Install Home Assistant and the test harness
         id: install
         env:
@@ -123,7 +142,8 @@ jobs:
           # plugin exists, install Home Assistant and the client library and run
           # only the import smoke test.
           mapfile -t integration_requirements < <(jq -r '.requirements[]' custom_components/bom_australia/manifest.json)
-          if uv pip install "$REQUIREMENT" "$HARNESS_REQUIREMENT" pytest-cov "${integration_requirements[@]}"; then
+          # --reinstall-package rebuilds the dev checkout with its translations.
+          if uv pip install --reinstall-package homeassistant "$REQUIREMENT" "$HARNESS_REQUIREMENT" pytest-cov "${integration_requirements[@]}"; then
             echo "harness=true" >> "$GITHUB_OUTPUT"
           else
             echo "::notice::No pytest-homeassistant release installs with Home Assistant $HA_VERSION yet; running the import smoke test only"
