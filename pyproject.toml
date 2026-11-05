@@ -10,12 +10,12 @@ requires-python = ">=3.14.2"
 test = [
     # Must match the requirement in custom_components/bom_australia/manifest.json.
     "bom-weather-api==0.2.0",
-    "freezegun==1.5.5",
     "pytest-cov==7.1.0",
-    # Pins homeassistant; move to the release matching the newest Home Assistant
-    # once it exists. The minimum supported version is in hacs.json.
-    "pytest-homeassistant-custom-component==0.13.375",
-    "syrupy==6.1.1",
+    # Home Assistant's official test plugin. Each release pins the matching
+    # homeassistant (and pytest, syrupy, freezegun), so this pin chooses the Home
+    # Assistant version the tests run on. 0.1.x are unrelated releases from 2020.
+    # The minimum supported Home Assistant version is in hacs.json.
+    "pytest-homeassistant==2026.11.0b6",
 ]
 dev = [
     { include-group = "test" },
@@ -78,8 +78,19 @@ split-on-trailing-comma = false
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 testpaths = ["tests"]
-addopts = "--strict-markers -p syrupy"
-filterwarnings = ["error"]
+# Let Home Assistant install its httpx alias before respx is imported.
+addopts = "--strict-markers -p no:respx"
+pythonpath = ["."]
+# Every warning fails a test, except deprecations raised by Home Assistant and
+# third-party code, which the integration cannot fix; deprecations raised by the
+# integration itself still fail (later filters take precedence).
+filterwarnings = [
+    "error",
+    "default::DeprecationWarning",
+    "default::PendingDeprecationWarning",
+    'error::DeprecationWarning:custom_components\.bom_australia(\.|$)',
+    'error::PendingDeprecationWarning:custom_components\.bom_australia(\.|$)',
+]
 
 [tool.coverage.run]
 branch = true

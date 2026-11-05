@@ -37,7 +37,7 @@ def frozen_time() -> None:
 @pytest.fixture
 def real_network(socket_enabled: None) -> Generator[None]:
     """Allow real network access (the HA test plugin blocks it)."""
-    from pytest_homeassistant_custom_component import plugins
+    from pytest_homeassistant import plugins
     import pytest_socket
 
     pytest_socket._remove_restrictions()

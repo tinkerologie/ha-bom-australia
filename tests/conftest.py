@@ -6,7 +6,7 @@ from collections.abc import Generator
 import json
 from pathlib import Path
 from typing import Any
-from unittest.mock import AsyncMock, MagicMock, PropertyMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 from bom_weather_api import BomClient, WarningDetails
 from bom_weather_api.parsers import (
@@ -20,7 +20,7 @@ from bom_weather_api.parsers import (
     parse_stations,
 )
 import pytest
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant.common import MockConfigEntry
 
 from custom_components.bom_australia.const import (
     CONF_FORECAST_DAYS,
@@ -65,11 +65,6 @@ def fixture_json(name: str) -> Any:
 
 
 @pytest.fixture(autouse=True)
-def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:
-    """Enable custom integrations in all tests."""
-
-
-@pytest.fixture(autouse=True)
 def fail_on_ha_deprecation_reports() -> Generator[None]:
     """Fail when Home Assistant logs deprecated use by this integration.
 
@@ -93,21 +88,12 @@ def frozen_time(freezer: Any) -> None:
 
 
 @pytest.fixture
-def entity_registry_enabled_by_default() -> Generator[None]:
-    """Enable all entities, including those disabled by default."""
-    with patch(
-        "homeassistant.helpers.entity.Entity.entity_registry_enabled_default",
-        new_callable=PropertyMock,
-        return_value=True,
-    ):
-        yield
-
-
-@pytest.fixture
 def mock_config_entry() -> MockConfigEntry:
     """Return a config entry for Brisbane."""
     return MockConfigEntry(
         domain=DOMAIN,
+        # Fixed, so snapshots that show the device's identifiers are stable.
+        entry_id="01JBOMTESTENTRY0000000000",
         title="Brisbane",
         unique_id="QLD_PT001",
         data=ENTRY_DATA,

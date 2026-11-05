@@ -6,18 +6,6 @@ project uses Home Assistant style versions (`YYYY.M.PATCH`).
 
 ## [Unreleased]
 
-### Changed
-
-- Ready for Home Assistant 2026.11: removed the dashboard cards' use of
-  `ha-md-list-item` (removed in 2026.11), added the manifest `categories` and
-  `connectivity` keys, described every config flow field, and documented
-  installing from the Marketplace.
-
-### Fixed
-
-- Reconfiguring the observation station shows the integration's own success
-  message again instead of Home Assistant's generic one.
-
 ### Added
 
 - Releases ship `bom_australia.zip` with a `SHA256SUMS` file and a signed
@@ -28,6 +16,21 @@ project uses Home Assistant style versions (`YYYY.M.PATCH`).
   weekly workflows test the next Home Assistant release and Core `dev` and watch
   the developer blog
   ([#8](https://github.com/tinkerologie/ha-bom-australia/issues/8)).
+
+### Changed
+
+- Ready for Home Assistant 2026.11: removed the dashboard cards' use of
+  `ha-md-list-item` (removed in 2026.11), added the manifest `categories` and
+  `connectivity` keys, described every config flow field, and documented
+  installing from the Marketplace.
+- Tests run on Home Assistant's official test plugin, `pytest-homeassistant`,
+  instead of `pytest-homeassistant-custom-component`, which is being retired.
+  The HA Next workflow now also runs the full test suite against Core `dev`.
+
+### Fixed
+
+- Reconfiguring the observation station shows the integration's own success
+  message again instead of Home Assistant's generic one.
 
 ## [2026.10.0] - 2026-10-28
 

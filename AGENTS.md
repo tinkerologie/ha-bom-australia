@@ -10,7 +10,7 @@ Meteorology data. Targets Home Assistant 2026.9+ and Python 3.14.
   - `config_flow.py`: user → town → station flow, reconfigure (station), `OptionsFlowWithReload` (forecast days)
   - `weather.py`, `sensor.py`, `entity.py`, `diagnostics.py`
   - `translations/en.json`: the only strings file (custom integrations cannot use `[%key:…]` references)
-- `tests/`: pytest-homeassistant-custom-component tests with syrupy snapshots in `tests/snapshots/`. Fixtures are real BoM responses captured on 2026-10-28.
+- `tests/`: tests on Home Assistant's official test plugin, [`pytest-homeassistant`](https://pypi.org/project/pytest-homeassistant/) (its pin in `pyproject.toml` chooses the Home Assistant version the tests run on), with syrupy snapshots in `tests/snapshots/`. Fixtures are real BoM responses captured on 2026-10-28.
 - The client library is [`bom-weather-api`](https://pypi.org/project/bom-weather-api/) (`tinkerologie/bom-weather-api`). Keep the pin in `manifest.json` and the `test` dependency group in `pyproject.toml` identical. To test against a local checkout: `BOM_API_PATH=../bom-api script/test`.
 
 ## Rules
@@ -49,7 +49,7 @@ for it explicitly:
 - **Next release (early warning):** the weekly `HA Next` workflow tests the newest
   `homeassistant` on PyPI (betas included) and Core `dev`: it imports every module
   (`script/import_smoke.py`), runs the tests when a matching
-  `pytest-homeassistant-custom-component` exists, and runs Hassfest. Failures open
+  `pytest-homeassistant` exists (Core `dev` carries its own), and runs Hassfest. Failures open
   one issue per channel labelled `ha-next` and `bug`.
 - **Developer blog:** the weekly `HA Dev Blog` workflow (`script/ha_dev_blog.py`)
   opens an issue labelled `ha-dev-blog` and `enhancement` for each post that
