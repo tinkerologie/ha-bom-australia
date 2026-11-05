@@ -6,6 +6,12 @@ project uses Home Assistant style versions (`YYYY.M.PATCH`).
 
 ## [Unreleased]
 
+## [2026.11.0] - 2026-11-05
+
+Ready for Home Assistant 2026.11, with an optional Open-Meteo forecast and
+verifiable release downloads. Home Assistant 2026.9 and later are still
+supported.
+
 ### Added
 
 - Optional Open-Meteo forecast (ECMWF IFS), off by default: extends the weather

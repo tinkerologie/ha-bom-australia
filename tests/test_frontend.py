@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from collections.abc import Generator
+import json
+from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 from unittest.mock import AsyncMock, MagicMock, patch
@@ -20,6 +22,9 @@ from homeassistant.exceptions import HomeAssistantError
 from .conftest import setup_integration
 
 CARD_URL = "/bom_australia/bom-australia-cards.js"
+VERSION = json.loads(
+    (Path(frontend.__file__).parent / "manifest.json").read_text(encoding="utf-8")
+)["version"]
 
 
 def _resources(items: list[dict[str, Any]]) -> MagicMock:
@@ -63,7 +68,7 @@ async def test_creates_resource(hass: HomeAssistant, web: SimpleNamespace) -> No
     hass.http.async_register_static_paths.assert_awaited_once()
     (created,) = resources.async_create_item.await_args.args
     assert created["res_type"] == "module"
-    assert created["url"].startswith(f"{CARD_URL}?v=2026.10.0-")
+    assert created["url"].startswith(f"{CARD_URL}?v={VERSION}-")
 
     # Registration is idempotent.
     await frontend.async_register_frontend(hass)
@@ -87,7 +92,7 @@ async def test_updates_stale_and_removes_duplicates(
     resources.async_create_item.assert_not_awaited()
     item_id, data = resources.async_update_item.await_args.args
     assert item_id == "a"
-    assert data["url"].startswith(f"{CARD_URL}?v=2026.10.0-")
+    assert data["url"].startswith(f"{CARD_URL}?v={VERSION}-")
     resources.async_delete_item.assert_awaited_once_with("b")
 
 
@@ -95,7 +100,7 @@ async def test_current_resource_left_alone(
     hass: HomeAssistant, web: SimpleNamespace
 ) -> None:
     digest = frontend._bundle_digest(frontend.FRONTEND_PATH / frontend.CARD_FILE)
-    url = f"{CARD_URL}?v=2026.10.0-{digest}"
+    url = f"{CARD_URL}?v={VERSION}-{digest}"
     resources = _resources([{"id": "a", "url": url, "type": "module"}])
     _use(hass, resources)
     await frontend.async_register_frontend(hass)
