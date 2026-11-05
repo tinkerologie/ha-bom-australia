@@ -31,7 +31,7 @@ from open_meteo import (
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
-from homeassistant.core import callback
+from homeassistant.core import CALLBACK_TYPE, callback
 from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import (
@@ -58,6 +58,8 @@ from .const import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from homeassistant.core import HomeAssistant
 
 _LOGGER = logging.getLogger(__name__)
@@ -107,6 +109,13 @@ def is_fresh(coordinator: TimestampDataUpdateCoordinator[Any]) -> bool:
         and last is not None
         and dt_util.utcnow() - last < 2 * interval
     )
+
+
+def is_due(coordinator: TimestampDataUpdateCoordinator[Any]) -> bool:
+    """Return whether a coordinator should refresh: its data is an interval old."""
+    last = coordinator.last_update_success_time
+    interval = coordinator.update_interval or timedelta(0)
+    return last is None or dt_util.utcnow() - last >= interval
 
 
 class BomCoordinator[DataT](TimestampDataUpdateCoordinator[DataT]):
@@ -513,9 +522,10 @@ class HourlySourceCoordinator(TimestampDataUpdateCoordinator[HourlySource]):
 
     The weather entity uses this as its hourly coordinator, so Home Assistant's
     on-demand refresh and expiry checks apply to the fallback as well. It does
-    no I/O itself: an update refreshes whichever source is out of date and
-    picks BoM's forecast when it is fresh, otherwise Open-Meteo's. Updates of
-    either source are passed on straight away.
+    no I/O itself: an update refreshes whichever source is due, through the
+    sources' debounced refresh requests, and picks BoM's forecast when it is
+    fresh, otherwise Open-Meteo's. While it has listeners it passes on updates
+    of either source; without listeners it does not keep the sources polling.
     """
 
     config_entry: BomConfigEntry
@@ -537,32 +547,69 @@ class HourlySourceCoordinator(TimestampDataUpdateCoordinator[HourlySource]):
         )
         self.bom = bom
         self.open_meteo = open_meteo
+        self._unsub_sources: list[CALLBACK_TYPE] = []
 
-    def _select(self) -> HourlySource:
+    def current(self) -> HourlySource | None:
+        """Return the hourly forecast to show now, judged on the sources' age.
+
+        Checked on every read, so cached data never outlives its source.
+        """
         if is_fresh(self.bom):
             return HourlySource(bom=self.bom.data)
         if is_fresh(self.open_meteo):
             return HourlySource(open_meteo=self.open_meteo.data.hours)
-        raise UpdateFailed(
-            translation_domain=DOMAIN,
-            translation_key="hourly_forecast_unavailable",
-        )
+        return None
 
     @override
     async def _async_update_data(self) -> HourlySource:
-        if not is_fresh(self.bom):
-            await self.bom.async_refresh()
-        if not is_fresh(self.bom) and not is_fresh(self.open_meteo):
-            await self.open_meteo.async_refresh()
-        return self._select()
+        if is_due(self.bom):
+            await self.bom.async_request_refresh()
+        if not is_fresh(self.bom) and is_due(self.open_meteo):
+            await self.open_meteo.async_request_refresh()
+        if (source := self.current()) is None:
+            raise UpdateFailed(
+                translation_domain=DOMAIN,
+                translation_key="hourly_forecast_unavailable",
+            )
+        return source
 
     @callback
-    def async_source_updated(self) -> None:
+    @override
+    def async_add_listener(
+        self, update_callback: CALLBACK_TYPE, context: Any = None
+    ) -> Callable[[], None]:
+        remove = super().async_add_listener(update_callback, context)
+        if not self._unsub_sources:
+            self._unsub_sources = [
+                source.async_add_listener(self._async_source_updated)
+                for source in (self.bom, self.open_meteo)
+            ]
+
+        @callback
+        def remove_listener() -> None:
+            remove()
+            if not self._listeners:
+                for unsub in self._unsub_sources:
+                    unsub()
+                self._unsub_sources = []
+
+        return remove_listener
+
+    @callback
+    def _async_source_updated(self) -> None:
         """Pass on an update of either source."""
-        try:
-            self.async_set_updated_data(self._select())
-        except UpdateFailed as err:
-            self.async_set_update_error(err)
+        if (source := self.current()) is not None:
+            # async_set_updated_data does not stamp the time, and without it
+            # the weather entity would refresh this coordinator again.
+            self.last_update_success_time = dt_util.utcnow()
+            self.async_set_updated_data(source)
+        else:
+            self.async_set_update_error(
+                UpdateFailed(
+                    translation_domain=DOMAIN,
+                    translation_key="hourly_forecast_unavailable",
+                )
+            )
 
 
 def diagnostics_data(

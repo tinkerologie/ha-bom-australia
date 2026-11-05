@@ -185,11 +185,13 @@ class BomWeather(
         if self._open_meteo is None:
             return None
         if not is_fresh(self._open_meteo):
-            # Polling may be disabled: refresh in the background, and leave the
-            # extension out until fresh data arrives.
-            self._open_meteo.config_entry.async_create_task(
-                self.hass, self._open_meteo.async_request_refresh()
-            )
+            # Leave the extension out until fresh data arrives. Old data after a
+            # successful update means polling is off: ask for a refresh. After a
+            # failure the coordinator retries itself, honouring Retry-After.
+            if self._open_meteo.last_update_success:
+                self._open_meteo.config_entry.async_create_task(
+                    self.hass, self._open_meteo.async_request_refresh()
+                )
             return None
         return self._open_meteo.data
 
@@ -316,8 +318,10 @@ class BomWeather(
         start = dt_util.utcnow() - timedelta(hours=1)
         hourly: HourlyForecast | None = self._hourly.data
         if self._hourly_source is not None:
-            # The base class only asks while the source has fresh data.
-            source = self._hourly_source.data
+            # Judged now, not from the cached choice, so expired data is never
+            # served.
+            if (source := self._hourly_source.current()) is None:
+                return None
             if source.open_meteo is not None:
                 return [
                     open_meteo_hourly(hour)
