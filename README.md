@@ -58,8 +58,20 @@ API, which blocks automated clients.
 
 ### Manual
 
-Copy `custom_components/bom_australia` into your Home Assistant
-`config/custom_components` folder and restart Home Assistant.
+1. Download `bom_australia.zip` from the latest release on the
+   [Releases page](https://github.com/tinkerologie/ha-bom-australia/releases).
+2. Create the folder `config/custom_components/bom_australia/` and extract the
+   zip into it. `manifest.json` must end up directly in that folder.
+3. Restart Home Assistant.
+
+Each release carries the zip, a `SHA256SUMS` file and a signed build provenance
+attestation, and HACS and the Marketplace install the same zip. To check that a
+zip you downloaded is the one the release workflow built:
+
+```bash
+gh attestation verify bom_australia.zip -R tinkerologie/ha-bom-australia
+sha256sum -c SHA256SUMS
+```
 
 ## Configuration
 

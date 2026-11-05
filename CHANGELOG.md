@@ -6,6 +6,13 @@ project uses Home Assistant style versions (`YYYY.M.PATCH`).
 
 ## [Unreleased]
 
+### Added
+
+- Releases ship `bom_australia.zip` with a `SHA256SUMS` file and a signed
+  build provenance attestation. HACS and the Marketplace install the zip and
+  show how often the latest release was downloaded
+  ([#7](https://github.com/tinkerologie/ha-bom-australia/issues/7)).
+
 ## [2026.10.0] - 2026-10-28
 
 First release: a rewrite of the Bureau of Meteorology integration for Home
