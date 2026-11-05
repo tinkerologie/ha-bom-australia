@@ -483,6 +483,43 @@ async def test_concurrent_requests_fetch_once(
     assert first == second
 
 
+async def test_request_waits_for_running_poll(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
+    freezer: Any,
+) -> None:
+    """A request waits for a source's own poll that is already running."""
+    mock_client.get_hourly_forecast.side_effect = BomConnectionError("down")
+    aioclient_mock.get(OPEN_METEO_URL, status=500, headers=JSON, text="{}")
+    await setup_integration(hass, open_meteo_entry)
+    runtime = open_meteo_entry.runtime_data
+    recovered = mock_client.get_hourly_forecast.return_value
+    freezer.tick(timedelta(hours=3))
+
+    # BoM recovers, but slowly: its own poll is in flight when the forecast is
+    # requested.
+    release = asyncio.Event()
+
+    async def slow_recovery(*_: Any) -> Any:
+        await release.wait()
+        return recovered
+
+    mock_client.get_hourly_forecast.side_effect = slow_recovery
+    poll = hass.async_create_task(runtime.hourly.async_refresh())
+    await asyncio.sleep(0)
+    calls = mock_client.get_hourly_forecast.call_count
+    request = hass.async_create_task(_forecast(hass, "hourly"))
+    await asyncio.sleep(0)
+    release.set()
+    await poll
+    hourly = await request
+    assert hourly
+    assert hourly[0]["datetime"].endswith("+00:00")
+    assert mock_client.get_hourly_forecast.call_count == calls
+
+
 async def test_hourly_requests_honour_retry_after(
     hass: HomeAssistant,
     mock_client: MagicMock,
@@ -636,3 +673,18 @@ def test_map_wmo_condition(
     code: int | None, is_night: bool | None, expected: str | None
 ) -> None:
     assert map_wmo_condition(code, is_night=is_night) == expected
+
+
+async def test_wait_for_attempt_gives_up(
+    hass: HomeAssistant,
+    mock_client: MagicMock,
+    open_meteo_entry: MockConfigEntry,
+    open_meteo: AiohttpClientMocker,
+) -> None:
+    """Waiting for a fetch that never finishes stops after the timeout."""
+    await setup_integration(hass, open_meteo_entry)
+    coordinator = open_meteo_entry.runtime_data.open_meteo
+    coordinator._attempt_done = asyncio.Event()
+    with patch("custom_components.bom_australia.coordinator.ATTEMPT_WAIT", 0):
+        await coordinator.async_wait_for_attempt()
+    assert not coordinator._attempt_done.is_set()
