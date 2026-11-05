@@ -35,6 +35,8 @@ from custom_components.bom_australia.const import (
 from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
 from homeassistant.core import HomeAssistant
 
+from .fixtures.deprecations import HANDLER as DEPRECATION_REPORTS
+
 FIXTURES = Path(__file__).parent / "fixtures"
 
 # The fixtures were captured from BoM shortly after this time.
@@ -65,6 +67,23 @@ def fixture_json(name: str) -> Any:
 @pytest.fixture(autouse=True)
 def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:
     """Enable custom integrations in all tests."""
+
+
+@pytest.fixture(autouse=True)
+def fail_on_ha_deprecation_reports() -> Generator[None]:
+    """Fail when Home Assistant logs deprecated use by this integration.
+
+    Home Assistant logs deprecated usage by integrations instead of raising
+    DeprecationWarning. Reports logged while modules were imported surface on the
+    first test.
+    """
+    yield
+    if reports := DEPRECATION_REPORTS.pop_reports():
+        pytest.fail(
+            "Home Assistant reported deprecated use by bom_australia:\n"
+            + "\n".join(reports),
+            pytrace=False,
+        )
 
 
 @pytest.fixture(autouse=True)
