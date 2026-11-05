@@ -52,6 +52,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["D", "INP001", "PLC0415", "SLF001", "TID251"]
+"script/**" = ["INP001", "T201"]
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
 "homeassistant.helpers.config_validation" = "cv"
