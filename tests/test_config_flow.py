@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 
 from bom_weather_api import BomConnectionError, BomNotFoundError
 import pytest
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant.common import MockConfigEntry
 
 from custom_components.bom_australia.const import (
     CONF_FORECAST_DAYS,

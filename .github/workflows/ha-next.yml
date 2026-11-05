@@ -75,6 +75,8 @@ jobs:
             {
               echo "ha_version=dev@${revision:0:12}"
               echo "requirement=homeassistant @ https://github.com/home-assistant/core/archive/$revision.tar.gz"
+              # Core ships the official test plugin in packages/pytest-homeassistant.
+              echo "harness_requirement=pytest-homeassistant @ https://github.com/home-assistant/core/archive/$revision.tar.gz#subdirectory=packages/pytest-homeassistant"
               echo "hassfest_ref=$revision"
             } >> "$GITHUB_OUTPUT"
             exit 0
@@ -104,26 +106,28 @@ jobs:
           {
             echo "ha_version=$ha_version"
             echo "requirement=homeassistant==$ha_version"
+            # Each pytest-homeassistant release pins the matching homeassistant.
+            echo "harness_requirement=pytest-homeassistant==$ha_version"
             echo "hassfest_ref=$ha_version"
           } >> "$GITHUB_OUTPUT"
 
       - name: Install Home Assistant and the test harness
         id: install
         env:
-          CHANNEL: ${{ matrix.channel }}
           HA_VERSION: ${{ steps.resolve.outputs.ha_version }}
           REQUIREMENT: ${{ steps.resolve.outputs.requirement }}
+          HARNESS_REQUIREMENT: ${{ steps.resolve.outputs.harness_requirement }}
         run: |
-          # pytest-homeassistant-custom-component pins one Home Assistant version
-          # and often lags a beta by days; it never matches Core dev. Without a
-          # match, install Home Assistant and the client library and run only the
-          # import smoke test.
-          if [[ "$CHANNEL" == release ]] && uv pip install --group test "$REQUIREMENT"; then
+          # Home Assistant's official test plugin is published for every release
+          # shortly after it, and Core dev carries it in packages/. Until a release's
+          # plugin exists, install Home Assistant and the client library and run
+          # only the import smoke test.
+          mapfile -t integration_requirements < <(jq -r '.requirements[]' custom_components/bom_australia/manifest.json)
+          if uv pip install "$REQUIREMENT" "$HARNESS_REQUIREMENT" pytest-cov "${integration_requirements[@]}"; then
             echo "harness=true" >> "$GITHUB_OUTPUT"
           else
-            echo "::notice::No pytest-homeassistant-custom-component release installs with Home Assistant $HA_VERSION; running the import smoke test only"
+            echo "::notice::No pytest-homeassistant release installs with Home Assistant $HA_VERSION yet; running the import smoke test only"
             echo "harness=false" >> "$GITHUB_OUTPUT"
-            mapfile -t integration_requirements < <(jq -r '.requirements[]' custom_components/bom_australia/manifest.json)
             uv pip install "$REQUIREMENT" "${integration_requirements[@]}"
           fi
           python -c "from homeassistant.const import __version__; print('Installed Home Assistant', __version__)"
@@ -177,7 +181,7 @@ jobs:
           if [[ "$HARNESS" == true ]]; then
             tests="$TESTS"
           else
-            tests="skipped: no pytest-homeassistant-custom-component for this version"
+            tests="skipped: no pytest-homeassistant for this version yet"
           fi
           {
             echo "## Home Assistant ${HA_VERSION:-unresolved}"

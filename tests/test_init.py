@@ -7,10 +7,7 @@ from unittest.mock import MagicMock
 
 from bom_weather_api import BomConnectionError, BomNotFoundError, BomRateLimitError
 import pytest
-from pytest_homeassistant_custom_component.common import (
-    MockConfigEntry,
-    async_fire_time_changed,
-)
+from pytest_homeassistant.common import MockConfigEntry, async_fire_time_changed
 
 from custom_components.bom_australia.const import DOMAIN
 from homeassistant.config_entries import ConfigEntryState
