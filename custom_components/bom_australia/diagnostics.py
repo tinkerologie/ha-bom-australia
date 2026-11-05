@@ -7,8 +7,9 @@ from typing import TYPE_CHECKING, Any
 
 from homeassistant.components.diagnostics import async_redact_data
 from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
+from homeassistant.helpers.update_coordinator import TimestampDataUpdateCoordinator
 
-from .coordinator import BomConfigEntry, BomCoordinator, diagnostics_data
+from .coordinator import BomConfigEntry, diagnostics_data
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -21,12 +22,15 @@ async def async_get_config_entry_diagnostics(
 ) -> dict[str, Any]:
     """Return diagnostics for a config entry."""
     runtime = entry.runtime_data
-    coordinators: dict[str, BomCoordinator[Any]] = {
+    coordinators: dict[str, TimestampDataUpdateCoordinator[Any]] = {
         "observation": runtime.observation,
         "daily_forecast": runtime.daily,
         "hourly_forecast": runtime.hourly,
         "warnings": runtime.warnings,
     }
+    if runtime.open_meteo is not None:
+        coordinators["open_meteo"] = runtime.open_meteo
+    open_meteo = runtime.open_meteo.data if runtime.open_meteo else None
     hourly = runtime.hourly.data
     return {
         "entry": {
@@ -47,4 +51,11 @@ async def async_get_config_entry_diagnostics(
         if hourly
         else None,
         "warnings": [asdict(warning) for warning in runtime.warnings.data or ()],
+        "open_meteo": {
+            "model": open_meteo.model,
+            "days": [asdict(day) for day in open_meteo.days[:3]],
+            "hours": [asdict(hour) for hour in open_meteo.hours[:3]],
+        }
+        if open_meteo
+        else None,
     }

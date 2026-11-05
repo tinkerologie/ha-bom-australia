@@ -104,7 +104,7 @@ export const en = {
   "editor.forecast_type.daily": "7 days",
   "editor.forecast_type.hourly": "Hourly",
   "editor.days": "Days",
-  "editor.days_helper": "Number of days in the daily forecast.",
+  "editor.days_helper": "Number of days in the daily forecast: up to 7 from BoM, or 15 with the Open-Meteo option.",
   "editor.hours": "Hours",
   "editor.hours_helper": "Number of hours in the hourly forecast.",
   "editor.show_text": "Show forecast text",

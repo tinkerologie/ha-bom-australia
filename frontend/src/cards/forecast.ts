@@ -182,7 +182,7 @@ export class ForecastCard extends BomCard<ForecastCardConfig> {
     super.validateConfig(config);
     const raw = config as unknown as Record<string, unknown>;
     assertChoice(raw, "forecast_type", FORECAST_TYPES);
-    assertPositiveInt(raw, "days", 1, 7);
+    assertPositiveInt(raw, "days", 1, 15);
     assertPositiveInt(raw, "hours", 1, 72);
     assertBoolean(raw, "show_text");
   }
@@ -204,7 +204,7 @@ export class ForecastCard extends BomCard<ForecastCardConfig> {
             },
           },
         },
-        { name: "days", default: DEFAULT_DAYS, selector: { number: { min: 1, max: 7, mode: "box" } } },
+        { name: "days", default: DEFAULT_DAYS, selector: { number: { min: 1, max: 15, mode: "box" } } },
         { name: "hours", default: DEFAULT_HOURS, selector: { number: { min: 1, max: 72, mode: "box" } } },
         { name: "show_text", default: true, selector: { boolean: {} } },
       ],

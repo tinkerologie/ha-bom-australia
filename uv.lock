@@ -1228,6 +1228,7 @@ source = { virtual = "." }
 dev = [
     { name = "bom-weather-api" },
     { name = "mypy" },
+    { name = "open-meteo" },
     { name = "pre-commit" },
     { name = "pytest-cov" },
     { name = "pytest-homeassistant" },
@@ -1235,6 +1236,7 @@ dev = [
 ]
 test = [
     { name = "bom-weather-api" },
+    { name = "open-meteo" },
     { name = "pytest-cov" },
     { name = "pytest-homeassistant" },
 ]
@@ -1245,6 +1247,7 @@ test = [
 dev = [
     { name = "bom-weather-api", specifier = "==0.2.0" },
     { name = "mypy", specifier = "==2.4.1" },
+    { name = "open-meteo", specifier = "==1.0.1" },
     { name = "pre-commit", specifier = "==4.7.0" },
     { name = "pytest-cov", specifier = "==7.1.0" },
     { name = "pytest-homeassistant", specifier = "==2026.11.0b6" },
@@ -1252,6 +1255,7 @@ dev = [
 ]
 test = [
     { name = "bom-weather-api", specifier = "==0.2.0" },
+    { name = "open-meteo", specifier = "==1.0.1" },
     { name = "pytest-cov", specifier = "==7.1.0" },
     { name = "pytest-homeassistant", specifier = "==2026.11.0b6" },
 ]
@@ -1897,6 +1901,21 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/9a/8e/105de02c1322cfada6d9710d9146ef8026419d433c9d08359a2d35805811/nodeenv-1.11.0.tar.gz", hash = "sha256:3ce8fe5b71d16e8af7039ca65257354100bc772965d6bc549070649e53b1b146", size = 99301, upload-time = "2026-09-26T11:29:21.367Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/54/c8/12811c9b48fde162bb72b6f2e78fada9a247a09d7bb5be2050a5d099c77b/nodeenv-1.11.0-py2.py3-none-any.whl", hash = "sha256:edaa16e6c14d7cf395d75d4bbd5a26390f4dc06501a33b4e76282b02cc688a25", size = 34277, upload-time = "2026-09-26T11:29:19.933Z" },
+]
+
+[[package]]
+name = "open-meteo"
+version = "1.0.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "aiohttp" },
+    { name = "mashumaro" },
+    { name = "orjson" },
+    { name = "yarl" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ad/a4/7e9ba48b776aca3de2bad38cb19baa378d3e41adff63704ca8081d1af4ec/open_meteo-1.0.1.tar.gz", hash = "sha256:6528aff6f15e13d6ac5594ce963cf971d8b883eb5d780fffa59fd2d8161ba430", size = 51667, upload-time = "2026-10-05T13:28:46.084Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2f/36/ceb246b5be9a1a01dee9c8826326f67c8b2c82e2bd6ec199a21fce64676d/open_meteo-1.0.1-py3-none-any.whl", hash = "sha256:75fcb3994cac078d704a882453f207b4ebeeed2768c4821351b8c97e66fe9020", size = 51215, upload-time = "2026-10-05T13:28:44.699Z" },
 ]
 
 [[package]]
