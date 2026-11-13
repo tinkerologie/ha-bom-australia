@@ -19,7 +19,7 @@ test = [
     # homeassistant (and pytest, syrupy, freezegun), so this pin chooses the Home
     # Assistant version the tests run on. 0.1.x are unrelated releases from 2020.
     # The minimum supported Home Assistant version is in hacs.json.
-    "pytest-homeassistant==2026.11.0b6",
+    "pytest-homeassistant==2026.11.1",
 ]
 dev = [
     { include-group = "test" },
