@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   test:
+    timeout-minutes: 30
     name: Lint and test
     runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '"ubuntu-latest"' || vars.RUNNER_LABELS || '"ubuntu-latest"') }}
     permissions:
@@ -49,12 +50,13 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
-          use_oidc: true
+          use_oidc: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
           files: ./coverage.xml
           disable_search: true
           fail_ci_if_error: false
 
   frontend:
+    timeout-minutes: 30
     name: Dashboard cards
     runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '"ubuntu-latest"' || vars.RUNNER_LABELS || '"ubuntu-latest"') }}
     defaults:
