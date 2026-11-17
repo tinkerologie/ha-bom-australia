@@ -17,7 +17,7 @@ concurrency:
 jobs:
   test:
     name: Lint and test
-    runs-on: ${{ fromJSON(vars.RUNNER_LABELS || '"ubuntu-latest"') }}
+    runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '"ubuntu-latest"' || vars.RUNNER_LABELS || '"ubuntu-latest"') }}
     permissions:
       contents: read
       id-token: write # Codecov OIDC upload
@@ -56,7 +56,7 @@ jobs:
 
   frontend:
     name: Dashboard cards
-    runs-on: ${{ fromJSON(vars.RUNNER_LABELS || '"ubuntu-latest"') }}
+    runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '"ubuntu-latest"' || vars.RUNNER_LABELS || '"ubuntu-latest"') }}
     defaults:
       run:
         working-directory: frontend
